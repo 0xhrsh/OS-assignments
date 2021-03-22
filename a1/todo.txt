@@ -1,0 +1,10 @@
+- pipes
+- error handling
+
+
+done
+- batch implementation
+- make a terminal with some internal commands
+- background processes
+- fork shit
+- all other commands are handled using terminal
