@@ -4,7 +4,8 @@
 Note: Make sure you are in directory d before running any of the following command.
 
 ### Compilation
-- You can directly run ```./run.sh```. This will do all the compilation
+- You can directly run ```./run.sh```. This will do all the compilation necessary.
+
 Or you can manually compile:
 
 - Compile ```convert.c``` to ```convert.out``` ```gcc convert.c -o convert.out```
