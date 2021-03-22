@@ -36,11 +36,11 @@ int main(int argc, char *argv[]){
         dup2(fd[0], 0); // Reading from pipe
         close(fd[1]); // This child won't write in pipe
 
-        char c;
-        while((c = getchar()) != 255 && c != EOF){
-            printf("%c", c);
+        if(execl("./count.out", NULL)==-1){
+            fprintf(stderr, "Please compile count.c to count.out before running.\n");
+            exit(1);
         }
-        
+
         close(fd[0]);
         fprintf(stderr, "Read pipe closed\n");
         
@@ -52,16 +52,19 @@ int main(int argc, char *argv[]){
             close(fd[0]); // This child won't read from pipe
             
 
-            char c;
-            while((c = getchar()) != 255 && c != EOF){
-                printf("%c", c);
+            if(execl("./convert.out", NULL)==-1){
+                fprintf(stderr, "Please compile convert.c to convert.out before running.\n");
+                putchar(EOF);
+                exit(1);
             }
-            printf("%c", EOF);
 
             close(fd[1]);
             fprintf(stderr, "Write pipe closed\n");
 
         } else{
+            close(fd[1]);
+            close(fd[0]);
+
             wait(NULL);
             wait(NULL);
         }
