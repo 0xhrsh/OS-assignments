@@ -34,7 +34,6 @@ int main(){
         while(true){
             sleep(1);
             write(fd1[1], colors[rand()%7], BUFSIZE);
-            
         }
 
     } else {
@@ -95,6 +94,5 @@ int main(){
             }
         }
     }
-    return 0;
-    
+    return 0;   
 }
