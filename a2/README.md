@@ -15,7 +15,7 @@ Or you can manually compile:
 ### Running
 You can run the code by the following command: ```./driver f1.txt f2.txt```
 
-PS: Here the program driver will take input from file f1.txt and print the output f2.txt. (Feel free to change the file names)
+PS: For the above command, the program ```driver``` will take input from file ```f1.txt``` and print the output to ```f2.txt```. (Feel free to change the file names)
 
 ## Question E
 Note: Make sure you are in directory e before running any of the following command.
