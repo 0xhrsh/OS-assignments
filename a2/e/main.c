@@ -11,6 +11,27 @@
 int nums[26];
 char* colors[] = {"Violet", "Indigo", "Blue", "Green", "Yellow", "Orange", "Red"};
 
+void sighup1(){ 
+    signal(SIGHUP, sighup1);
+    printf("C1: I have Won\n"); 
+} 
+  
+void sigint1(){ 
+    signal(SIGINT, sigint1); /* reset signal */
+    printf("C1: I have Lost\n"); 
+}
+
+void sighup2(){ 
+    signal(SIGHUP, sighup2);
+    printf("C2: I have Won\n"); 
+} 
+  
+void sigint2(){ 
+    signal(SIGINT, sigint2); /* reset signal */
+    printf("C2: I have Lost\n"); 
+}
+
+
 int main(){
 
     nums['V' - 'A'] = 1;
@@ -31,6 +52,9 @@ int main(){
     
 
     if((pid1 = fork()) == 0){ // C1 Process
+        signal(SIGHUP, sighup1); // winner
+        signal(SIGINT, sigint1); // loser
+
         close(fd2[0]); // Closing C2 Pipe
         close(fd2[1]);
 
@@ -43,6 +67,9 @@ int main(){
 
     } else {
         if((pid2 = fork()) == 0){ // C2 Process
+            signal(SIGHUP, sighup2); // winner
+            signal(SIGINT, sigint2); // loser
+
             close(fd1[0]); // Closing C1 Pipe
             close(fd1[1]);
 
@@ -57,6 +84,7 @@ int main(){
 
         } else{ // Parent Process
             int score1 = 0, score2 = 0;
+            int winner = -1;
 
             sleep(1);
             srand(time(0));
@@ -75,10 +103,12 @@ int main(){
                     printf("Round Ignored\n\n");
                 }else if(x[0] == p[0]){
                     LINE;
+                    winner = 1;
                     printf("\nC1 wins\n");
                     break;
                 } else if(y[0] == p[0]){
                     LINE;
+                    winner = 2;
                     printf("\nC2 wins\n");
                     break;
                 } else {
@@ -89,14 +119,17 @@ int main(){
 
                 if(score1 >= 50 && score2 <50){
                     LINE;
+                    winner = 1;
                     printf("\nC1 wins with score: %d\n", score1);
                     break;
                 } else if(score2 >= 50 && score1 < 50){
                     LINE;
+                    winner = 2;
                     printf("\nC2 wins with score: %d\n", score2);
                     break;
                 } else if(score1 >= 50 && score2 >= 50){
                     LINE;
+                    winner = 0;
                     printf("Draw!\n");
                     break;
                 }
@@ -105,8 +138,16 @@ int main(){
             close(fd1[0]); // closing the reading channels
             close(fd2[0]);
 
-            kill(pid1, 0);
-            kill(pid2, 0);
+            if(winner == 1){
+                kill(pid1, SIGHUP);
+                kill(pid2, SIGINT);
+            } else if(winner == 2){
+                kill(pid1, SIGINT);
+                kill(pid2, SIGHUP);
+            } else {
+                kill(pid1, SIGHUP);
+                kill(pid2, SIGHUP);
+            }
             
             waitpid(pid1, NULL, 0);
             waitpid(pid2, NULL, 0);
