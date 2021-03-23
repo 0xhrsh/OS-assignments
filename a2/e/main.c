@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include<time.h>
+#include<sys/wait.h>
 
 #define BUFSIZE 10
 #define LINE printf("\n===============================\n")
@@ -25,11 +26,15 @@ int main(){
 
     pipe(fd1);
     pipe(fd2);
+
+    pid_t pid1, pid2;
     
 
-    if(fork() == 0){ // C1 Process
+    if((pid1 = fork()) == 0){ // C1 Process
         close(fd2[0]); // Closing C2 Pipe
         close(fd2[1]);
+
+        close(fd1[0]); // This child won't read from pipe
 
         while(true){
             sleep(1);
@@ -37,9 +42,11 @@ int main(){
         }
 
     } else {
-        if(fork() == 0){ // C2 Process
+        if((pid2 = fork()) == 0){ // C2 Process
             close(fd1[0]); // Closing C1 Pipe
             close(fd1[1]);
+
+            close(fd2[0]); // This child won't read from pipe
         
             srand(time(0));
 
@@ -53,6 +60,9 @@ int main(){
 
             sleep(1);
             srand(time(0));
+
+            close(fd1[1]); // This child won't write in pipe
+            close(fd2[1]); // This child won't write in pipe
 
             while(true){
                 char* p = colors[rand()%7]; // equal to som random number
@@ -77,21 +87,29 @@ int main(){
                     printf("Score: C1:%d, C2:%d\n\n", score1, score2);
                 }
 
-                if(score1 > 50 && score2 <=50){
+                if(score1 >= 50 && score2 <50){
                     LINE;
                     printf("\nC1 wins with score: %d\n", score1);
                     break;
-                } else if(score2 > 50 && score1 <= 50){
+                } else if(score2 >= 50 && score1 < 50){
                     LINE;
                     printf("\nC2 wins with score: %d\n", score2);
                     break;
-                } else if(score1 > 50 && score2 > 50){
+                } else if(score1 >= 50 && score2 >= 50){
                     LINE;
                     printf("Draw!\n");
                     break;
                 }
                 sleep(1);
             }
+            close(fd1[0]); // closing the reading channels
+            close(fd2[0]);
+
+            kill(pid1, 0);
+            kill(pid2, 0);
+            
+            waitpid(pid1, NULL, 0);
+            waitpid(pid2, NULL, 0);
         }
     }
     return 0;   
