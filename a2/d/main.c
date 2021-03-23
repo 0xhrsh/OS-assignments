@@ -6,25 +6,21 @@
 #include<sys/wait.h>
 #include <fcntl.h>
 
-
-
 extern int errno ;
-
 
 int main(int argc, char *argv[]){
     if(argc != 3){
-        printf("Incorrect Argument number");
+        fprintf(stderr, "Incorrect argument format. Please provide 2 file names\n");
+        exit(1);
     }
     int f1, f2;
 
-    if ((f1 = open(argv[1],O_RDONLY)) == 0){
-        
+    if ((f1 = open(argv[1], O_RDONLY)) == -1){
         fprintf(stderr, "Error opening %s: %s\n", argv[1], strerror(errno));
         exit(1);
     }dup2(f1, 0); // Reading from file1
 
-    if ((f2 = open(argv[2],O_WRONLY)) == 0){
-        
+    if ((f2 = open(argv[2], O_WRONLY | O_TRUNC | O_CREAT)) == -1){
         fprintf(stderr, "Error opening %s: %s\n", argv[2], strerror(errno));
         exit(1);
     }dup2(f2, 1); // Writing to f2
@@ -50,7 +46,6 @@ int main(int argc, char *argv[]){
         if (fork() == 0){ // Second Child
             dup2(fd[1], 1); // Writing to pipe
             close(fd[0]); // This child won't read from pipe
-            
 
             if(execl("./convert.out", NULL)==-1){
                 fprintf(stderr, "Please compile convert.c to convert.out before running.\n");
@@ -67,6 +62,9 @@ int main(int argc, char *argv[]){
 
             wait(NULL);
             wait(NULL);
+            
+            close(f1);
+            close(f2);
         }
     }
     return 0;
