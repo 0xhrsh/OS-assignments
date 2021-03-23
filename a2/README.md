@@ -15,6 +15,8 @@ Or you can manually compile:
 ### Running
 You can run the code by the following command: ```./driver f1.txt f2.txt```
 
+IMPORTANT: If you are having problems with opening the file ```f2.txt```, please run the following command: ```sudo chmod 777 f2.txt``` (This error may occur if you don't have permissions to view the file)
+
 PS: For the above command, the program ```driver``` will take input from file ```f1.txt``` and print the output to ```f2.txt```. (Feel free to change the file names)
 
 ## Question E
