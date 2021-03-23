@@ -62,7 +62,9 @@ int main(){
                 read(fd2[0], y, BUFSIZE);
 
                 printf("C1 chose: %s, C2 chose: %s, P chose: %s\n", x, y, p);
-                if(x[0] == p[0]){
+                if(x[0] == p[0] && y[0] == p[0]){
+                    printf("Round Ignored\n\n");
+                }else if(x[0] == p[0]){
                     LINE;
                     printf("\nC1 wins\n");
                     break;
