@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
         exit(1);
     }dup2(f2, 1); // Writing to f2
 
-    int fd[0], n=0, i;
+    int fd[0];
     pipe(fd); 
 
     if (fork() == 0) { // First Child process
