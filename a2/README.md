@@ -1,4 +1,4 @@
-# Assignment 2
+# Lab Assignment 2
 
 ## Question D
 Note: Make sure you are in directory d before running any of the following command.
