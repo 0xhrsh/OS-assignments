@@ -40,9 +40,11 @@ int main(){
     }
 
     ofstream file("input.txt", ios::trunc);
+
+    file<<n<<endl;
     
     repp(i,n){
-        file<<i<<","<<processes[i][0]<<","<<processes[i][1]<<","<<processes[i][2]<<endl;
+        file<<i<<" "<<processes[i][0]<<" "<<processes[i][1]<<" "<<processes[i][2]<<endl;
     }
     file.close();
 
