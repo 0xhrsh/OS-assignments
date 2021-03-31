@@ -13,11 +13,15 @@ using namespace std;
 
 #define exMean 10
 default_random_engine generator;
+
 exponential_distribution<float> exp_distribution(1.0/exMean);
 uniform_int_distribution<int> uni_distribution_burst(1, 20);
 uniform_int_distribution<int> uni_distribution_priority(1, 10);
 
 int main(int argc, char* argv[]){
+    srand ( time(NULL) );
+    generator.seed(time(NULL));
+    
     if(argc != 2){
         fprintf(stderr, "Enter only 1 integer as cmd line argument\n");
         exit(1);
