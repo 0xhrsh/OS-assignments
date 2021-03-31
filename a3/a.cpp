@@ -18,6 +18,10 @@ uniform_int_distribution<int> uni_distribution_burst(1, 20);
 uniform_int_distribution<int> uni_distribution_priority(1, 10);
 
 int main(int argc, char* argv[]){
+    if(argc != 2){
+        fprintf(stderr, "Enter only 1 integer as cmd line argument\n");
+        exit(1);
+    }
     int n = stoi(argv[1]);
     // cout<<"Enter the number of processes: ";
     // cin>>n;
@@ -43,7 +47,7 @@ int main(int argc, char* argv[]){
     file<<n<<endl;
     
     repp(i,n){
-        file<<i<<" "<<processes[i][0]<<" "<<processes[i][1]<<" "<<processes[i][2]<<endl;
+        file<<processes[i][0]<<" "<<processes[i][1]<<" "<<processes[i][2]<<endl;
     }
     file.close();
 

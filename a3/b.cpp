@@ -103,7 +103,7 @@ queue<int> arrange_first_come_first_serve(queue<int> q, int curr){
     return q;
 }
 
-queue<int> arrange_non_preemptive_shortest_job_first(queue<int> q, int curr){
+queue<int> arrange_preemptive_shortest_job_first(queue<int> q, int curr){
     queue<int> nq;
     int mini = -1, minCpuBurst = 10000;
 
@@ -127,10 +127,10 @@ queue<int> arrange_non_preemptive_shortest_job_first(queue<int> q, int curr){
     return q;
 }
 
-queue<int> arrange_preemptive_shortest_job_first(queue<int> q, int curr){
+queue<int> arrange_non_preemptive_shortest_job_first(queue<int> q, int curr){
     if(curr != -1) return q;
 
-    return arrange_non_preemptive_shortest_job_first(q, curr);
+    return arrange_preemptive_shortest_job_first(q, curr);
 }
 
 queue<int> arrange_round_robin(queue<int> q, int curr){
