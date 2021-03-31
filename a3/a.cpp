@@ -27,12 +27,11 @@ int main(){
         if(i==0){
             processes[0][0] = 0; // arrival time is zero for first process
         } else{
-            
             int num = int(exp_distribution(generator));
             while(num>10){
                 num = int(exp_distribution(generator));
             }
-            processes[i][0] = num;
+            processes[i][0] = processes[i-1][0] + num;
         }
 
         processes[i][1] = uni_distribution_burst(generator);
