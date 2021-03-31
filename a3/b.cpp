@@ -5,38 +5,39 @@ using namespace std;
 #define mem(v,i) memset(v,i,sizeof(v))
 
 #define N_MAX 1000
-
 int currTime;
-bool isCpuBusy;
-int currProc;
-int procStarted;
-int arr[10000][3];
+int arr[N_MAX][3];
+int processingTime[N_MAX];
 
-void cpu(){
-    if(currProc == -1){
-        isCpuBusy = false;
-    } else if(procStarted + arr[currProc][1] == currTime){
-        isCpuBusy = false;
-    } else{
-        isCpuBusy = true;
-    }    
-    return;
+bool cpu(int task){
+    // printf("Current Task in cpu is: %d\n", task);
+    processingTime[task]--;
+    if(processingTime[task] == 0)
+        return true;
+    
+    return false;
 }
 
 
-void first_come_first_serve(int n){
+void driver(int n, queue<int> q, queue<int> (*arrange)(queue<int>, int)){
     int tt[n], wt[n], rt[n];
-    int ienter = 0;
-    int metrics[n][4]; // enter the queue, ready, start, end
     mem(tt,0); mem(wt,0); mem(rt,0);
 
-    queue<int> q;
+    float att = 0.0, awt = 0.0, art = 0.0;
+
+    int ienter = 0;
+
+    int metrics[n][4]; // enter the queue, first got cpu, processed, end
+    mem(metrics,0);
+    repp(i,n){
+        metrics[i][1] = -1;
+        processingTime[i] = arr[i][1];
+    }
+
     currTime = 0;
-    isCpuBusy = false;
-    currProc = -1;
+    int currProcs = -1;
     
-    
-    while(currTime<1500){
+    while(currTime<2500){
 
         while(arr[ienter][0] == currTime){
             metrics[ienter][0] = currTime;
@@ -49,56 +50,141 @@ void first_come_first_serve(int n){
             ienter++;
         }
 
-        cpu();
-
-        if(!isCpuBusy && currProc != -1){
-            metrics[currProc][3] = currTime;
-
-
-            if(!q.empty()){
-                    metrics[q.front()][2] = currTime;
-                    currProc = q.front();
-                    procStarted = currTime;
-                    q.pop();
-
-                    if(!q.empty()){
-                        metrics[q.front()][1] = currTime;
-                    }
-            }
-        } else if(!isCpuBusy){
-            if(!q.empty()){
-                metrics[q.front()][2] = currTime;
-                currProc = q.front();
-                procStarted = currTime;
-                metrics[q.front()][1] = currTime;
-                q.pop();
-
-                if(!q.empty()){
-                    metrics[q.front()][1] = currTime;
-                }
-            }
-        }   
         currTime++;
+
+        if(!q.empty()){
+            
+            q = (*arrange)(q, currProcs);
+            currProcs = q.front();
+
+
+            bool isFinished = cpu(q.front());
+            metrics[q.front()][2]++;
+
+            if(metrics[q.front()][1] == -1)
+                metrics[q.front()][1] = currTime-1;
+            
+            if(isFinished){
+                metrics[q.front()][3] = currTime;
+                q.pop();
+                currProcs = -1;
+            }
+        } else{
+            currProcs = -1;
+        }
     }
     
-    repp(i,n)cerr<<metrics[i][0]<<" "<<metrics[i][1]<<" "<<metrics[i][2]<<" "<<metrics[i][3]<<endl;
+    repp(i,n){
+        // cerr<<metrics[i][0]<<" "<<metrics[i][1]<<" "<<metrics[i][2]<<" "<<metrics[i][3]<<endl;
+
+        tt[i] = metrics[i][3] - metrics[i][0];
+        wt[i] = metrics[i][3] - metrics[i][0] - metrics[i][2];
+        rt[i] = metrics[i][1] - metrics[i][0];
+
+        att += tt[i];
+        awt += wt[i];
+        art += rt[i];
+
+    }
+
+    att = att/float(n);
+    awt = awt/float(n);
+    art = art/float(n);
+
+    cout<<att<<"\t"<<awt<<"\t"<<art<<endl;
+    // repp(i,n){
+    //     cout<<endl<<tt[i]<<" "<<wt[i]<<" "<<rt[i];
+    // }
 
 }
 
-void non_preemptive_shortest_job_first(int n, int arr[][3]){
-    float att = 0.0, awt = 0.0, art = 0.0;
+queue<int> arrange_first_come_first_serve(queue<int> q, int curr){
+    return q;
 }
 
-void preemptive_shortest_job_first(int n, int arr[][3]){
-    float att = 0.0, awt = 0.0, art = 0.0;
+queue<int> arrange_non_preemptive_shortest_job_first(queue<int> q, int curr){
+    queue<int> nq;
+    int mini, minCpuBurst = 100;
+
+    while(!q.empty()){
+        if(arr[q.front()][1]<minCpuBurst){
+            mini = q.front();
+            minCpuBurst = arr[q.front()][1];
+        }
+        nq.push(q.front());
+        q.pop();
+    }
+
+    q.push(mini);
+
+    while(!nq.empty()){
+        if(nq.front()!=mini){
+            q.push(nq.front());
+        }
+        nq.pop();
+    }
+    return q;
 }
 
-void round_robin(int n, int arr[][3], int delta){
-    float att = 0.0, awt = 0.0, art = 0.0;
+queue<int> arrange_preemptive_shortest_job_first(queue<int> q, int curr){
+    if(curr != -1) return q;
+
+    queue<int> nq;
+    int mini, minCpuBurst = 1000;
+
+    while(!q.empty()){
+        if(arr[q.front()][1]<minCpuBurst){
+            mini = q.front();
+            minCpuBurst = arr[q.front()][1];
+        }
+        nq.push(q.front());
+        q.pop();
+    }
+
+    q.push(mini);
+
+    while(!nq.empty()){
+        if(nq.front()!=mini){
+            q.push(nq.front());
+        }
+        nq.pop();
+    }
+    return q;
 }
 
-void priority_based(int n, int arr[][3]){
-    float att = 0.0, awt = 0.0, art = 0.0;
+queue<int> arrange_round_robin(queue<int> q, int curr){
+    if(q.front() != curr)
+        return q;
+
+    int frt = q.front();
+    q.pop();
+    q.push(frt);
+
+    return q;
+}
+
+queue<int> arrange_priority_based(queue<int> q, int curr){
+    queue<int> nq;
+    int mini, minPriority = 10000;
+
+    while(!q.empty()){
+        if(arr[q.front()][2]<minPriority){
+            mini = q.front();
+            minPriority = arr[q.front()][2];
+        }
+        nq.push(q.front());
+        q.pop();
+    }
+
+    q.push(mini);
+
+    while(!nq.empty()){
+        if(nq.front()!=mini){
+            q.push(nq.front());
+        }
+        nq.pop();
+    }
+    return q;
 }
 
 int main(){
@@ -111,15 +197,19 @@ int main(){
         cin >> arr[i][0]>>arr[i][1]>>arr[i][2];
     }
 
-    first_come_first_serve(n);
-
-    // non_preemptive_shortest_job_first(n, arr);
-
-    // preemptive_shortest_job_first(n, arr);
-
-    // round_robin(n, arr, 2);
-
-    // priority_based(n, arr);
+    queue<int> q;
+    cout<<"Algorithm\tATT\tAWT\tART\n";
+    cout<<"=======================================\n";
+    cout<<"FCFS\t\t";
+    driver(n, q, arrange_first_come_first_serve);
+    cout<<"NPSJF\t\t";
+    driver(n, q, arrange_non_preemptive_shortest_job_first);
+    cout<<"PSJF\t\t";
+    driver(n, q, arrange_preemptive_shortest_job_first);
+    cout<<"RR\t\t";
+    driver(n, q, arrange_round_robin);
+    cout<<"Priority\t";
+    driver(n, q, arrange_priority_based);
 
     return 0;
 }
