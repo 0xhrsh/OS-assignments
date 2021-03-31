@@ -39,3 +39,9 @@ This will:
 - Run the scheduler program for each of the files in the folder ```data/```.
 - Create the output graphs in the folder ```graphs/```.
 
+## Assumptions
+- There can be maximum 1000 processes.
+- The time take to finish the process should not be more than 2500 seconds.
+
+## Bugs
+- No Known bugs
