@@ -13,7 +13,7 @@ int arr[N_MAX][3];
 int processingTime[N_MAX];
 
 bool cpu(int task){
-    // printf("Current Task in cpu is: %d at time %d\n", task, currTime -1 );
+    // fprintf(stderr,"Current Task in cpu is: %d at time %d\n", task, currTime -1 );
     processingTime[task]--;
     if(processingTime[task] == 0)
         return true;
@@ -69,6 +69,7 @@ void driver(int n, queue<int> q, queue<int> (*arrange)(queue<int>, int)){
                 metrics[q.front()][3] = currTime;
                 q.pop();
                 currProcs = -1;
+                t_delta = delta;
             }
         } else{
             currProcs = -1;
@@ -135,15 +136,19 @@ queue<int> arrange_non_preemptive_shortest_job_first(queue<int> q, int curr){
 
 queue<int> arrange_round_robin(queue<int> q, int curr){
     // cerr<<"Round robin: front, curr"<<q.front()<<" "<<curr<<endl;
+    
     if(curr == -1){
         return q;
-        t_delta--;
-    }
-    else if(q.front() == curr && t_delta > 1){
+        
+    } else if(q.front() != curr && t_delta > 1 && t_delta < delta){
+        t_delta = delta;
+        return q;
+    } else if(q.front() == curr && t_delta > 1){
         t_delta--;
         return q;
     }
     t_delta = delta;
+    
 
     int frt = q.front();
     q.pop();
