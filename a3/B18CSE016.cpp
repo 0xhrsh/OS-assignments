@@ -45,6 +45,7 @@ void driver(int n, queue<int> q, queue<int> (*arrange)(queue<int>, int)){
         while(arr[ienter][0] == currTime){
             metrics[ienter][0] = currTime;
             q.push(ienter);
+            cerr<<"Process: "<<ienter<<" entered to the queue at time: "<<currTime<<endl;
             ienter++;
         }
 
@@ -55,19 +56,19 @@ void driver(int n, queue<int> q, queue<int> (*arrange)(queue<int>, int)){
             q = (*arrange)(q, currProcs);
             currProcs = q.front();
 
-
             bool isFinished = cpu(q.front());
             metrics[q.front()][2]++;
 
             if(metrics[q.front()][1] == -1){
                 metrics[q.front()][1] = currTime -1;
             }
-
-                
             
             if(isFinished){
                 metrics[q.front()][3] = currTime;
+
+                cerr<<"Process: "<<q.front()<<" is removed from the queue at time: "<<currTime<<endl;
                 q.pop();
+
                 currProcs = -1;
                 t_delta = delta;
             }
@@ -77,8 +78,6 @@ void driver(int n, queue<int> q, queue<int> (*arrange)(queue<int>, int)){
     }
     
     repp(i,n){
-        // cerr<<metrics[i][0]<<" "<<metrics[i][1]<<" "<<metrics[i][2]<<" "<<metrics[i][3]<<endl;
-
         tt[i] = metrics[i][3] - metrics[i][0];
         wt[i] = metrics[i][3] - metrics[i][0] - metrics[i][2];
         rt[i] = metrics[i][1] - metrics[i][0];
@@ -86,7 +85,6 @@ void driver(int n, queue<int> q, queue<int> (*arrange)(queue<int>, int)){
         att += tt[i];
         awt += wt[i];
         art += rt[i];
-
     }
 
     att = att/float(n);
@@ -94,6 +92,7 @@ void driver(int n, queue<int> q, queue<int> (*arrange)(queue<int>, int)){
     art = art/float(n);
 
     cout<<att<<"\t"<<awt<<"\t"<<art<<endl;
+
     // repp(i,n){
     //     cout<<endl<<tt[i]<<" "<<wt[i]<<" "<<rt[i];
     // }
@@ -134,9 +133,7 @@ queue<int> arrange_non_preemptive_shortest_job_first(queue<int> q, int curr){
     return arrange_preemptive_shortest_job_first(q, curr);
 }
 
-queue<int> arrange_round_robin(queue<int> q, int curr){
-    // cerr<<"Round robin: front, curr"<<q.front()<<" "<<curr<<endl;
-    
+queue<int> arrange_round_robin(queue<int> q, int curr){    
     if(curr == -1){
         return q;
         
@@ -194,16 +191,26 @@ int main(){
     queue<int> q;
     cout<<"Algorithm\tATT\tAWT\tART\n";
     cout<<"=======================================\n";
+
     cout<<"FCFS\t\t";
+    cerr<<"Running for FCFS algorithm"<<endl;
     driver(n, q, arrange_first_come_first_serve);
+
     cout<<"NPSJF\t\t";
+    cerr<<"Running for NPSJF algorithm"<<endl;
     driver(n, q, arrange_non_preemptive_shortest_job_first);
+
     cout<<"PSJF\t\t";
+    cerr<<"Running for PSJF algorithm"<<endl;
     driver(n, q, arrange_preemptive_shortest_job_first);
+
     cout<<"RR\t\t";
+    cerr<<"Running for RR algorithm"<<endl;
     t_delta = delta;
     driver(n, q, arrange_round_robin);
+
     cout<<"Priority\t";
+    cerr<<"Running for Priority based scheduling algorithm"<<endl;
     driver(n, q, arrange_priority_based);
 
     return 0;

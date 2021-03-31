@@ -4,19 +4,23 @@ import matplotlib.pyplot as plt
 
 def compile():
     subprocess.call(["g++", "a.cpp"])
-    subprocess.call(["g++", "b.cpp", "-o", "scheduler"])
-    print("Compilation done!")
+    subprocess.call(["g++", "B18CSE016.cpp", "-o", "scheduler"])
+    print("Compilation Done!")
 
 
 
 def saveData(arr):
+    print("Running program for various N")
+    
     os.system('mkdir data')
+    os.system('mkdir graphs')
     i = 0
     while(i<iterations):
         for n in arr:
             os.system("./a.out {}".format(n))
             os.system("./scheduler < in.txt > data/out{}_{}.txt".format(n, i+1))
         i+=1
+    print("Programs ran successfully")
 
 #att
 def make_att_graphs():
@@ -94,6 +98,7 @@ if __name__ == '__main__':
 
 
     # reading and organize data, so graphs can be made easily
+    print("Reading and compiling data!")
     for n in range(len(arr)):
         i = 0
         while(i<iterations):
@@ -119,7 +124,8 @@ if __name__ == '__main__':
                 art[2][nums[0]][n] = min(temp_art, art[2][nums[0]][n])
         
             i += 1
-        
+    
+    print("Making graphs!") 
     make_art_graphs()
     make_awt_graphs()
     make_att_graphs()
