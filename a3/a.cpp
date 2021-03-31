@@ -17,10 +17,10 @@ exponential_distribution<float> exp_distribution(1.0/exMean);
 uniform_int_distribution<int> uni_distribution_burst(1, 20);
 uniform_int_distribution<int> uni_distribution_priority(1, 10);
 
-int main(){
-    int n;
-    cout<<"Enter the number of processes: ";
-    cin>>n;
+int main(int argc, char* argv[]){
+    int n = stoi(argv[1]);
+    // cout<<"Enter the number of processes: ";
+    // cin>>n;
     int processes[n][3]; // in this order -> arrival time, cpu burst, priority
 
     repp(i,n){
@@ -38,7 +38,7 @@ int main(){
         processes[i][2] = uni_distribution_priority(generator);
     }
 
-    ofstream file("input.txt", ios::trunc);
+    ofstream file("in.txt", ios::trunc);
 
     file<<n<<endl;
     

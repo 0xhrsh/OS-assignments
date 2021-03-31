@@ -5,12 +5,15 @@ using namespace std;
 #define mem(v,i) memset(v,i,sizeof(v))
 
 #define N_MAX 1000
+#define delta 2
+
 int currTime;
+int t_delta;
 int arr[N_MAX][3];
 int processingTime[N_MAX];
 
 bool cpu(int task){
-    // printf("Current Task in cpu is: %d\n", task);
+    // printf("Current Task in cpu is: %d at time %d\n", task, currTime -1 );
     processingTime[task]--;
     if(processingTime[task] == 0)
         return true;
@@ -27,7 +30,7 @@ void driver(int n, queue<int> q, queue<int> (*arrange)(queue<int>, int)){
 
     int ienter = 0;
 
-    int metrics[n][4]; // enter the queue, first got cpu, processed, end
+    int metrics[n][4]; // enter the queue, first got cpu, time processed, end
     mem(metrics,0);
     repp(i,n){
         metrics[i][1] = -1;
@@ -41,11 +44,6 @@ void driver(int n, queue<int> q, queue<int> (*arrange)(queue<int>, int)){
 
         while(arr[ienter][0] == currTime){
             metrics[ienter][0] = currTime;
-
-            if(q.empty()){
-                metrics[ienter][1] = currTime;
-            }
-
             q.push(ienter);
             ienter++;
         }
@@ -61,8 +59,11 @@ void driver(int n, queue<int> q, queue<int> (*arrange)(queue<int>, int)){
             bool isFinished = cpu(q.front());
             metrics[q.front()][2]++;
 
-            if(metrics[q.front()][1] == -1)
-                metrics[q.front()][1] = currTime-1;
+            if(metrics[q.front()][1] == -1){
+                metrics[q.front()][1] = currTime -1;
+            }
+
+                
             
             if(isFinished){
                 metrics[q.front()][3] = currTime;
@@ -104,12 +105,12 @@ queue<int> arrange_first_come_first_serve(queue<int> q, int curr){
 
 queue<int> arrange_non_preemptive_shortest_job_first(queue<int> q, int curr){
     queue<int> nq;
-    int mini, minCpuBurst = 100;
+    int mini = -1, minCpuBurst = 10000;
 
     while(!q.empty()){
-        if(arr[q.front()][1]<minCpuBurst){
+        if(processingTime[q.front()]<minCpuBurst){
             mini = q.front();
-            minCpuBurst = arr[q.front()][1];
+            minCpuBurst = processingTime[q.front()];
         }
         nq.push(q.front());
         q.pop();
@@ -129,32 +130,20 @@ queue<int> arrange_non_preemptive_shortest_job_first(queue<int> q, int curr){
 queue<int> arrange_preemptive_shortest_job_first(queue<int> q, int curr){
     if(curr != -1) return q;
 
-    queue<int> nq;
-    int mini, minCpuBurst = 1000;
-
-    while(!q.empty()){
-        if(arr[q.front()][1]<minCpuBurst){
-            mini = q.front();
-            minCpuBurst = arr[q.front()][1];
-        }
-        nq.push(q.front());
-        q.pop();
-    }
-
-    q.push(mini);
-
-    while(!nq.empty()){
-        if(nq.front()!=mini){
-            q.push(nq.front());
-        }
-        nq.pop();
-    }
-    return q;
+    return arrange_non_preemptive_shortest_job_first(q, curr);
 }
 
 queue<int> arrange_round_robin(queue<int> q, int curr){
-    if(q.front() != curr)
+    // cerr<<"Round robin: front, curr"<<q.front()<<" "<<curr<<endl;
+    if(curr == -1){
         return q;
+        t_delta--;
+    }
+    else if(q.front() == curr && t_delta > 1){
+        t_delta--;
+        return q;
+    }
+    t_delta = delta;
 
     int frt = q.front();
     q.pop();
@@ -207,6 +196,7 @@ int main(){
     cout<<"PSJF\t\t";
     driver(n, q, arrange_preemptive_shortest_job_first);
     cout<<"RR\t\t";
+    t_delta = delta;
     driver(n, q, arrange_round_robin);
     cout<<"Priority\t";
     driver(n, q, arrange_priority_based);
