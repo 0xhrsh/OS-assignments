@@ -6,61 +6,83 @@ using namespace std;
 
 #define N_MAX 1000
 
-void first_come_first_serve(int n, int arr[][3]){
+int currTime;
+bool isCpuBusy;
+int currProc;
+int procStarted;
+int arr[10000][3];
+
+void cpu(){
+    if(currProc == -1){
+        isCpuBusy = false;
+    } else if(procStarted + arr[currProc][1] == currTime){
+        isCpuBusy = false;
+    } else{
+        isCpuBusy = true;
+    }    
+    return;
+}
+
+
+void first_come_first_serve(int n){
     int tt[n], wt[n], rt[n];
-    int cpu[n][4]; // enter the queue, ready, start, end
+    int ienter = 0;
+    int metrics[n][4]; // enter the queue, ready, start, end
     mem(tt,0); mem(wt,0); mem(rt,0);
 
     queue<int> q;
+    currTime = 0;
+    isCpuBusy = false;
+    currProc = -1;
+    
+    
+    while(currTime<1500){
 
-    int time = 0;
-    int computing = -1;
-    int ienter = 0, end = 0;
-    while(time<1000){
+        while(arr[ienter][0] == currTime){
+            metrics[ienter][0] = currTime;
 
-        while(arr[ienter][0] == time){
-            cpu[ienter][0] = time;
+            if(q.empty()){
+                metrics[ienter][1] = currTime;
+            }
+
             q.push(ienter);
             ienter++;
         }
 
-        if(computing == -1){
-            if(q.empty()){
-                if(time>10000)break;
-                time++;
-                continue;
+        cpu();
+
+        if(!isCpuBusy && currProc != -1){
+            metrics[currProc][3] = currTime;
+
+
+            if(!q.empty()){
+                    metrics[q.front()][2] = currTime;
+                    currProc = q.front();
+                    procStarted = currTime;
+                    q.pop();
+
+                    if(!q.empty()){
+                        metrics[q.front()][1] = currTime;
+                    }
             }
-            computing = q.front();
-            cpu[q.front()][2] = time;
-            cpu[q.front()][1] = time;
-            q.pop();
-
-            if(!q.empty())
-                cpu[q.front()][1] = time;
-        }
-
-        if(arr[computing][1] + end == time){
-            cerr<<time<<" "<<computing<<" "<<q.front()<<endl;
-            cpu[computing][3] = time;
-            end = time;
-
-            if(q.empty()){
-                computing = -1; 
-            } else {
-                computing = q.front();
-                cpu[computing][2] = time;
+        } else if(!isCpuBusy){
+            if(!q.empty()){
+                metrics[q.front()][2] = currTime;
+                currProc = q.front();
+                procStarted = currTime;
+                metrics[q.front()][1] = currTime;
                 q.pop();
 
-                cerr<<time<<" "<<computing<<" "<<q.front()<<endl;
-
-                if(!q.empty())
-                    cpu[q.front()][1] = time;
+                if(!q.empty()){
+                    metrics[q.front()][1] = currTime;
+                }
             }
-        }
-        time++;
+        }   
+        currTime++;
     }
+    
+    repp(i,n)cerr<<metrics[i][0]<<" "<<metrics[i][1]<<" "<<metrics[i][2]<<" "<<metrics[i][3]<<endl;
 
-    repp(i,n)cerr<<cpu[i][0]<<" "<<cpu[i][1]<<" "<<cpu[i][2]<<" "<<cpu[i][3]<<endl;
 }
 
 void non_preemptive_shortest_job_first(int n, int arr[][3]){
@@ -83,13 +105,13 @@ int main(){
     int n;    
     cin >> n;
 
-    int arr[n][3];
+    // int arr[n][3];
 
     repp(i, n){
         cin >> arr[i][0]>>arr[i][1]>>arr[i][2];
     }
 
-    first_come_first_serve(n, arr);
+    first_come_first_serve(n);
 
     // non_preemptive_shortest_job_first(n, arr);
 
