@@ -17,7 +17,7 @@ using namespace std;
 #define ACTIVE 1
 #define DEAD 2
 
-int buffer[M];
+int buffer[M], n;
 int bufferFill = 0, producersActive = 0, consumersActive = 0;
 int status[N_MAX]; // 0, 1, 2 -> sleep, active, dead
 bool statusLocked = true;
@@ -29,8 +29,8 @@ queue<int> readyQ;
 void signal_handler(int sigNum){
 	if(sigNum == SIGUSR1) // sleep if not dead
 		status[activeWorker]=(status[activeWorker]==DEAD)?DEAD:SLEEP;
-	if(sigNum == SIGUSR2) // wake up the thread if not dead
-		status[activeWorker]=(status[activeWorker]==DEAD)?DEAD:ACTIVE;
+	if(sigNum == SIGUSR2) // wake up the thread
+		status[activeWorker]=ACTIVE;
 }
 
 
@@ -45,21 +45,29 @@ void *producer(void *ptr){
     
     int numsProduced = 0;
     while(true){
-        if(numsProduced == GENERATION_LIMIT){
+        if(status[tn] == DEAD){
+            producersActive--;
+            cout<<"Producer: "<<tn<<" Killed!"<<endl;
+            sleep(1);
+            pthread_exit(0);
+        }
+        
+        if(status[tn] == SLEEP) continue;
+
+        if(numsProduced >= GENERATION_LIMIT){
             while(statusLocked);
             statusLocked = true;
             status[tn] = DEAD;
             statusLocked = false;
-            producersActive--;
-            cout<<"==>Producer: "<<tn<<" Killed because it reached limit."<<bufferFill<<"<--"<<endl;
-            break;
+            
+            continue;
         } 
-        if(status[tn]==SLEEP) continue;
-        while(bufferFill == M);
+        
+        if(bufferFill == M) continue;
         
         
         buffer[bufferFill] = rand()%100;
-        // cerr<<"\tNumber"<<buffer[bufferFill]<<" Entered into buffer: "<<tn<<endl;
+        // cerr<<"\tNumber"<<buffer[bufferFill]<<" "<<bufferFill<<" Entered into buffer: "<<tn<<endl;
         bufferFill++;
         numsProduced++;
     }
@@ -78,22 +86,27 @@ void *consumer(void *ptr){
     int numsConsumed = 0;    
 
     while(true){
-        if(numsConsumed == GENERATION_LIMIT){
-            while(statusLocked);
-            statusLocked = true;
-            status[tn] = DEAD;
-            statusLocked = false;
+        if(status[tn] == DEAD){
             consumersActive--;
-            cout<<"==>Consumer: "<<tn<<" Killed because it reached limit. "<<bufferFill<<"<--"<<endl;
-            break;
+            sleep(1);
+            pthread_exit(0);
         }   
         
-        if(status[tn]==SLEEP)continue;
-        while(bufferFill == 0);
+        if(status[tn] == SLEEP)continue;
 
-        if(bufferFill==0)cerr<<"Fishy\n";
-        int num = buffer[--bufferFill];
-        // cerr<<"\tNumber"<<num<<" Read from buffer: "<<tn<<endl;
+        if(bufferFill == 0){
+            if(producersActive == 0){
+                while(statusLocked);
+                statusLocked = true;
+                status[tn] = DEAD;
+                statusLocked = false;
+            }
+            continue;
+        }
+
+        bufferFill--;
+        int num = buffer[bufferFill];
+        // cerr<<"\tNumber: "<<num<<" read from buffer by "<<tn<<endl;
         numsConsumed++;   
     }
     return NULL; 
@@ -105,7 +118,7 @@ void *scheduler(void *ptr){
     sleep(2);
     while(true){
         if((producersActive == 0 && consumersActive == 0) || readyQ.empty()){
-            cout<<"All processes are over, killing scheduler"<<endl;
+            cout<<"\nAll processes are over, killing scheduler"<<endl;
             break;
         }
 
@@ -114,16 +127,16 @@ void *scheduler(void *ptr){
         if(status[activeWorker] == DEAD) continue;
         readyQ.push(activeWorker);
 
-        cout<<"\nContext Switching to : "<<activeWorker<<" ("<<(thread_type==0?"Producer":"Consumer")<<")"<<endl;
+        cout<<"\nContext Switching to : "<<activeWorker<<" ("<<(thread_type[activeWorker]?"Consumer":"Producer")<<")"<<endl;
         cout<<"\tActive Producers: "<<producersActive<<" Active Consumers: "<<consumersActive<<endl;
-        cout<<"before\tNumber of Elements in buffer: "<<bufferFill<<endl;
+        cout<<"\tBefore: Number of Elements in buffer: "<<bufferFill<<endl;
         
         pthread_kill(workers[activeWorker], SIGUSR2);
         sleep(1);
         pthread_kill(workers[activeWorker], SIGUSR1);
-        // sleep(1);
-        cout<<"after\tNumber of Elements in buffer: "<<bufferFill<<endl;
+        while(status[activeWorker]==ACTIVE);
 
+        cout<<"\tAfter: Number of Elements in buffer: "<<bufferFill<<endl;
     }
     return NULL;
 }
@@ -132,7 +145,6 @@ int main(){
     // ios_base::sync_with_stdio(false);
     // cin.tie(NULL);
 
-    int n;
     cerr<<"Enter n: ";
     cin>>n;
 
