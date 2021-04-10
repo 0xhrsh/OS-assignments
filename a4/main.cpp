@@ -9,9 +9,10 @@
 
 using namespace std;
 
-#define M 100
-#define GENERATION_LIMIT 100
-#define N_MAX 100
+#define M 5000
+#define GENERATION_LIMIT 1000
+#define N_MAX 200
+#define QUANTUM 1
 
 #define SLEEP 0
 #define ACTIVE 1
@@ -22,7 +23,7 @@ int bufferFill = 0, producersActive = 0, consumersActive = 0;
 int status[N_MAX]; // 0, 1, 2 -> sleep, active, dead
 bool statusLocked = true;
 int activeWorker = -1;
-bool thread_type[N_MAX]; // 0 is producer, 1 is consumer
+bool thread_type[N_MAX], killWorker[N_MAX]; // thread_type: 0 is producer, 1 is consumer
 
 queue<int> readyQ;
 
@@ -45,20 +46,22 @@ void *producer(void *ptr){
     
     int numsProduced = 0;
     while(true){
-        if(status[tn] == DEAD){
-            producersActive--;
-            cout<<"Producer: "<<tn<<" Killed!"<<endl;
-            sleep(1);
+
+        if(killWorker[tn]){
             pthread_exit(0);
+            break;
         }
-        
-        if(status[tn] == SLEEP) continue;
+
+        if(status[tn] != ACTIVE) continue;
 
         if(numsProduced >= GENERATION_LIMIT){
             while(statusLocked);
             statusLocked = true;
             status[tn] = DEAD;
             statusLocked = false;
+
+            producersActive--;
+            cout<<"Producer: "<<tn<<" Killed!"<<endl; 
             
             continue;
         } 
@@ -86,13 +89,12 @@ void *consumer(void *ptr){
     int numsConsumed = 0;    
 
     while(true){
-        if(status[tn] == DEAD){
-            consumersActive--;
-            sleep(1);
+        if(killWorker[tn]){
             pthread_exit(0);
-        }   
+            break;
+        }
         
-        if(status[tn] == SLEEP)continue;
+        if(status[tn] != ACTIVE)continue;
 
         if(bufferFill == 0){
             if(producersActive == 0){
@@ -100,6 +102,8 @@ void *consumer(void *ptr){
                 statusLocked = true;
                 status[tn] = DEAD;
                 statusLocked = false;
+
+                consumersActive--;
             }
             continue;
         }
@@ -127,23 +131,25 @@ void *scheduler(void *ptr){
         if(status[activeWorker] == DEAD) continue;
         readyQ.push(activeWorker);
 
-        cout<<"\nContext Switching to : "<<activeWorker<<" ("<<(thread_type[activeWorker]?"Consumer":"Producer")<<")"<<endl;
+        cout<<"\nContext Switching to Worker: "<<activeWorker<<" ("<<(thread_type[activeWorker]?"Consumer":"Producer")<<")"<<endl;
         cout<<"\tActive Producers: "<<producersActive<<" Active Consumers: "<<consumersActive<<endl;
         cout<<"\tBefore: Number of Elements in buffer: "<<bufferFill<<endl;
         
         pthread_kill(workers[activeWorker], SIGUSR2);
-        sleep(1);
+        sleep(QUANTUM);
         pthread_kill(workers[activeWorker], SIGUSR1);
         while(status[activeWorker]==ACTIVE);
 
         cout<<"\tAfter: Number of Elements in buffer: "<<bufferFill<<endl;
+
+        if(status[activeWorker] == DEAD)killWorker[activeWorker] = true;
     }
     return NULL;
 }
 
 int main(){
-    // ios_base::sync_with_stdio(false);
-    // cin.tie(NULL);
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
 
     cerr<<"Enter n: ";
     cin>>n;
@@ -155,9 +161,10 @@ int main(){
     mem(status, SLEEP);
     statusLocked = false;
 
+    cerr<<"Starting Workers\n";
     repp(i,n){
-        // thread_type[i] = rand()%2;
-        thread_type[i] = i%2;
+        thread_type[i] = rand()%2;
+        // thread_type[i] = i%2;
         
         workers[i] = pthread_t();
 
