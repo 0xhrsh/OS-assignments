@@ -153,7 +153,7 @@ int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    cerr<<"Enter n: ";
+    cerr<<"Enter n (number of worker threads): ";
     cin>>n;
 
     
