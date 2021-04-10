@@ -2,7 +2,7 @@
 
 ## Compiling and Running
 - You can run the code using the run.sh script as: ```./run.sh``` (you might have to run ```sudo chmod +x run.sh``` before)
-- ```g++ -pthread main.cpp && ./a.out > out.txt```
+- Or you can run it manually using the command: ```g++ -pthread main.cpp && ./a.out > out.txt```
 
 ## Note
 - The buffer size is currently 5000, you can change that in line 12 of main.cpp -> ```#define M 5000```
