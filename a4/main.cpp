@@ -10,9 +10,10 @@
 using namespace std;
 
 #define M 5000
+#define QUANTUM 1
+
 #define GENERATION_LIMIT 1000
 #define N_MAX 200
-#define QUANTUM 1
 
 #define SLEEP 0
 #define ACTIVE 1
@@ -104,6 +105,7 @@ void *consumer(void *ptr){
                 statusLocked = false;
 
                 consumersActive--;
+                cout<<"Consumer: "<<tn<<" Killed!"<<endl; 
             }
             continue;
         }
@@ -121,7 +123,7 @@ void *scheduler(void *ptr){
     pthread_t *workers = (pthread_t *)ptr;
     sleep(2);
     while(true){
-        if((producersActive == 0 && consumersActive == 0) || readyQ.empty()){
+        if(readyQ.empty()){
             cout<<"\nAll processes are over, killing scheduler"<<endl;
             break;
         }
