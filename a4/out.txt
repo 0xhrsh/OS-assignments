@@ -1,0 +1,74 @@
+Producer Thread. Tnum: 0Consumer Thread. Tnum: 1
+
+Producer Thread. Tnum: 4
+Consumer Thread. Tnum: 7
+Producer Thread. Tnum: 6
+Consumer Thread. Tnum: 9
+Producer Thread. Tnum: 8
+Consumer Thread. Tnum: 5
+Consumer Thread. Tnum: 3
+Producer Thread. Tnum: 2
+
+Context Switching to : 0 (Consumer)
+	Active Producers: 5 Active Consumers: 5
+before	Number of Elements in buffer: 0
+==>Producer: 0 Killed because it reached limit.100<--
+after	Number of Elements in buffer: 100
+
+Context Switching to : 1 (Consumer)
+	Active Producers: 4 Active Consumers: 5
+before	Number of Elements in buffer: 100
+==>Consumer: 1 Killed because it reached limit. 0<--
+after	Number of Elements in buffer: 0
+
+Context Switching to : 4 (Consumer)
+	Active Producers: 4 Active Consumers: 4
+before	Number of Elements in buffer: 0
+==>Producer: 4 Killed because it reached limit.100<--
+after	Number of Elements in buffer: 100
+
+Context Switching to : 7 (Consumer)
+	Active Producers: 3 Active Consumers: 4
+before	Number of Elements in buffer: 100
+==>Consumer: 7 Killed because it reached limit. 0<--
+after	Number of Elements in buffer: 0
+
+Context Switching to : 6 (Consumer)
+	Active Producers: 3 Active Consumers: 3
+before	Number of Elements in buffer: 0
+==>Producer: 6 Killed because it reached limit.100<--
+after	Number of Elements in buffer: 100
+
+Context Switching to : 9 (Consumer)
+	Active Producers: 2 Active Consumers: 3
+before	Number of Elements in buffer: 100
+==>Consumer: 9 Killed because it reached limit. 0<--
+after	Number of Elements in buffer: 0
+
+Context Switching to : 8 (Consumer)
+	Active Producers: 2 Active Consumers: 2
+before	Number of Elements in buffer: 0
+==>Producer: 8 Killed because it reached limit.100<--
+after	Number of Elements in buffer: 100
+
+Context Switching to : 5 (Consumer)
+	Active Producers: 1 Active Consumers: 2
+before	Number of Elements in buffer: 100
+==>Consumer: 5 Killed because it reached limit. 0<--
+after	Number of Elements in buffer: 0
+
+Context Switching to : 3 (Consumer)
+	Active Producers: 1 Active Consumers: 1
+before	Number of Elements in buffer: 0
+after	Number of Elements in buffer: 0
+
+Context Switching to : 2 (Consumer)
+	Active Producers: 1 Active Consumers: 1
+before	Number of Elements in buffer: 0
+==>Producer: 2 Killed because it reached limit.100<--
+after	Number of Elements in buffer: 100
+
+Context Switching to : 3 (Consumer)
+	Active Producers: 0 Active Consumers: 1
+before	Number of Elements in buffer: 100
+==>Consumer: 3 Killed because it reached limit. 1<--
