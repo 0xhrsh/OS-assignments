@@ -124,7 +124,7 @@ void *scheduler(void *ptr){
     sleep(2);
     while(true){
         if(readyQ.empty()){
-            cout<<"\nAll processes are over, killing scheduler"<<endl;
+            cerr<<"\nAll processes are over, killing scheduler"<<endl;
             break;
         }
 
@@ -135,14 +135,14 @@ void *scheduler(void *ptr){
 
         cout<<"\nContext Switching to Worker: "<<activeWorker<<" ("<<(thread_type[activeWorker]?"Consumer":"Producer")<<")"<<endl;
         cout<<"\tActive Producers: "<<producersActive<<" Active Consumers: "<<consumersActive<<endl;
-        cout<<"\tBefore: Number of Elements in buffer: "<<bufferFill<<endl;
+        cout<<"\tBefore switching: Number of Elements in buffer: "<<bufferFill<<endl;
         
         pthread_kill(workers[activeWorker], SIGUSR2);
         sleep(QUANTUM);
         pthread_kill(workers[activeWorker], SIGUSR1);
         while(status[activeWorker]==ACTIVE);
 
-        cout<<"\tAfter: Number of Elements in buffer: "<<bufferFill<<endl;
+        cout<<"\tAfter switching: Number of Elements in buffer: "<<bufferFill<<endl;
 
         if(status[activeWorker] == DEAD)killWorker[activeWorker] = true;
     }
@@ -163,7 +163,7 @@ int main(){
     mem(status, SLEEP);
     statusLocked = false;
 
-    cerr<<"Starting Workers\n";
+    cerr<<"Starting Worker threads\n";
     repp(i,n){
         thread_type[i] = rand()%2;
         // thread_type[i] = i%2;
@@ -177,6 +177,7 @@ int main(){
         }
     }
 
+    cerr<<"Starting scheduler thread\n";
     pthread_t tscheduler;
     pthread_create( &tscheduler, NULL, scheduler, (void*)workers);
 
@@ -185,6 +186,8 @@ int main(){
     }
 
     pthread_join(tscheduler, NULL);
+
+    cerr<<"All threads closed\n";
 
     return 0;
 }
