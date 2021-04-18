@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+queue<int> couchQ;
+
 class Customer{
     public:
         int id;
@@ -13,6 +15,7 @@ class Customer{
         }
 
         void sitOnSofa(){
+            couchQ.push(id);
             cout<<"Customer "<<id<<" sits in the waiting room\n";
         }
 
@@ -56,17 +59,19 @@ class Barber{
 
 class Gatekeeper{
     public:
-        int id;
-        Gatekeeper(int g_id){
-            id = g_id;
-            cerr<<"Gatekeeper "<<id<<" created\n";
+        int tokens_issued;
+        Gatekeeper(){
+            tokens_issued = 0;
+            cerr<<"Gatekeeper created\n";
         }
 
         void giveToken(int customerID){
+            tokens_issued++;
             cout<<"customer "<<customerID<<" takes token\n";
         }
 
         void takeToken(int customerID){
+            tokens_issued--;
             cout<<"The customer "<<customerID<<" submits the token to the gatekeeper.\n";
             cout<<"The customer "<<customerID<<" leaves the shop.\n";
         }
