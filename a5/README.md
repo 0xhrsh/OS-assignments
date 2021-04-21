@@ -8,7 +8,7 @@
 
 ## Bugs:
 - No known bugs.
-- The solution is free from deadlock and starvation!
+- The solution is free from deadlock and starvation! (since no semaphores are in a circular loop)
 
 ## Assumptions:
 - Max numbers of barbers and customers is 500.
