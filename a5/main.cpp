@@ -11,8 +11,10 @@ using namespace std;
 #define repp(i,n) for(int i=(0);i<(n);i++)
 #define rep(i,a,n) for(int i=(a);i<(n);i++)
 
-#define MAX_BRBRS 100
-#define MAX_CSTMRS 100
+#define MAX_BRBRS 500
+#define MAX_CSTMRS 500
+
+#define CUST_SLEEP_TIME_LIMIT 10
 
 #define WAITING_OUTSIDE 1
 #define WAIT_ROOM 2
@@ -40,6 +42,7 @@ const int INITIAL_VALUE = 1;
 sem_t semCouch, semOutside, semWaitingRoom, semPayment, semCSTMR_BRBR, semClean, semCstmrStatus, semLeave;
 
 void* initCustomer(void* ptr){
+    // std::this_thread::sleep_for (std::chrono::seconds(rand()%CUST_SLEEP_TIME_LIMIT));
     int id = *(int *)(&ptr);
     Customer c(id);
 
@@ -96,6 +99,7 @@ void* initCustomer(void* ptr){
     cstmrStatus[id] = BRBR_CHAIR;
     sem_post(&semCstmrStatus);
     
+
     c.waitforPayment();
     while(cstmrStatus[id]!=CLEANED_CHAIR)continue;
 
@@ -254,7 +258,7 @@ int main(int argc, char *argv[]){
         pthread_join(cstmrs[i], NULL);
     cerr<<"All customers done\n";
     repp(i, n_brbrs)
-        pthread_join(brbrs[i], NULL);
+        pthread_join(brbrs[i], NULL);   
 
     return 0;
 }

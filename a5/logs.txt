@@ -1,0 +1,75 @@
+Customer 1 arrives at the barbershop
+customer 1 takes token
+Customer 2 arrives at the barbershop
+customer 2 takes token
+Customer 2 enters the barbershop
+Customer 2 sits in the waiting room
+Customer 2 sits on barber chair 0 to get a haircut
+Customer 3 arrives at the barbershop
+customer 3 takes token
+Customer 3 enters the barbershop
+Customer 3 sits in the waiting room
+Customer 3 sits on barber chair 1 to get a haircut
+Customer 4 arrives at the barbershop
+Customer 1 enters the barbershop
+Customer 1 sits in the waiting room
+Customer 0 arrives at the barbershop
+Barber 1 starts haircut of customer 3
+Barber 0 starts haircut of customer 2
+customer 4 takes token
+Customer 4 enters the barbershop
+Barber 1 finishes haircut of customer 3
+Barber 0 finishes haircut of customer 2
+Barber 1 is cleaning.
+Customer 3 leaves barber chair 1 to pay
+Barber 1 recieve payment from customer 3
+Barber 1 is sleeping, waiting for customer
+Customer 1 sits on barber chair 1 to get a haircut
+Barber 1 starts haircut of customer 1
+Customer 3 leaves the barbershop after paying for the service
+Customer 4 sits in the waiting room
+The cashier has received payment from customer: 3
+The customer 3 submits the token to the gatekeeper.
+customer 0 takes token
+Customer 3 exits the barbershop
+Customer 0 enters the barbershop
+Barber 0 is cleaning.
+Customer 2 leaves barber chair 0 to pay
+Barber 0 recieve payment from customer 2
+Barber 0 is sleeping, waiting for customer
+Barber 1 finishes haircut of customer 1
+Customer 2 leaves the barbershop after paying for the service
+Customer 4 sits on barber chair 0 to get a haircut
+Barber 0 starts haircut of customer 4
+Customer 0 sits in the waiting room
+The cashier has received payment from customer: 2
+The customer 2 submits the token to the gatekeeper.
+Customer 2 exits the barbershop
+Barber 1 is cleaning.
+Customer 1 leaves barber chair 1 to pay
+Barber 0 finishes haircut of customer 4
+Barber 1 recieve payment from customer 1
+Barber 1 is sleeping, waiting for customer
+Customer 0 sits on barber chair 1 to get a haircut
+Barber 1 starts haircut of customer 0
+Customer 1 leaves the barbershop after paying for the service
+The cashier has received payment from customer: 1
+The customer 1 submits the token to the gatekeeper.
+Customer 1 exits the barbershop
+Barber 0 is cleaning.
+Customer 4 leaves barber chair 0 to pay
+Barber 1 finishes haircut of customer 0
+Barber 0 recieve payment from customer 4
+Barber 0 is sleeping, waiting for customer
+Customer 4 leaves the barbershop after paying for the service
+The cashier has received payment from customer: 4
+The customer 4 submits the token to the gatekeeper.
+Customer 4 exits the barbershop
+Barber 1 is cleaning.
+Customer 0 leaves barber chair 1 to pay
+Barber 1 recieve payment from customer 0
+Barber 1 is sleeping, waiting for customer
+Customer 0 leaves the barbershop after paying for the service
+The cashier has received payment from customer: 0
+The customer 0 submits the token to the gatekeeper.
+Customer 0 exits the barbershop

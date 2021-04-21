@@ -3,6 +3,8 @@ using namespace std;
 
 sem_t semSTDOUT;
 
+#define WAIT_TIME 1
+
 class Customer{
     public:
         int id;
@@ -67,20 +69,19 @@ class Barber{
             sem_wait(&semSTDOUT);
             cout<<"Barber "<<id<<" starts haircut of customer "<<customerID<<"\n";
             sem_post(&semSTDOUT);
-            std::this_thread::sleep_for (std::chrono::seconds(1));
+            std::this_thread::sleep_for (std::chrono::seconds(WAIT_TIME));
             sem_wait(&semSTDOUT);
             cout<<"Barber "<<id<<" finishes haircut of customer "<<customerID<<"\n";
             sem_post(&semSTDOUT);
         }
 
         void cleanChair(){
-            std::this_thread::sleep_for (std::chrono::seconds(1));
+            std::this_thread::sleep_for (std::chrono::seconds(WAIT_TIME));
             sem_wait(&semSTDOUT);
             cout<<"Barber "<<id<<" is cleaning.\n";
             sem_post(&semSTDOUT);
         }
         void acceptPayment(int customerID){
-            std::this_thread::sleep_for (std::chrono::seconds(1));
             sem_wait(&semSTDOUT);
             cout<<"Barber "<<id<<" recieve payment from customer "<<customerID<<"\n";
             sem_post(&semSTDOUT);
