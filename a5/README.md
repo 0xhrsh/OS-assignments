@@ -2,7 +2,7 @@
 
 ## Compile and Run:
 - You can simply run using the command: ```./run.sh``` [Note: Run ```sudo chmod +x run.sh``` in case of any permission error]
-- You can also run it manually using the following command: ```g++ main.cpp -pthread && ./a.out -b=2 -c=5 -w=10``` [Here b, c, w are the number of barbers, chairs, capacity of waiting room respectively.]
+- You can also run it manually using the following command: ```g++ main.cpp -pthread && ./a.out -b=2 -c=5 -w=10 > out.txt``` [Here b, c, w are the number of barbers, chairs, capacity of waiting room respectively.]
 - Email anand.2@iitj.ac.in in case of any errors.
 
 ## Bugs:
