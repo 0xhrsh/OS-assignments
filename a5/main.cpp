@@ -99,6 +99,7 @@ void* initBarber(void* ptr){
     while(gateKeeperPresent){
         // wait for customer to show up
         if(couchQ.empty()){
+            awake = false;
             if(awake) b.sleep();
             continue;
         }
