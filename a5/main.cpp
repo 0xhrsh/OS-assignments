@@ -24,9 +24,7 @@ using namespace std;
 #define CAN_EXIT 8
 #define OUTSIDE 9
 
-int capacity;
 int n_brbrs=-1, n_chrs=-1, n_wtRoom=-1;
-int brbrs_free;
 bool gateKeeperPresent = true;
 
 int cstmrStatus[MAX_CSTMRS]; // 0 in chair, 1 cutting done, 2 payment done
@@ -55,6 +53,8 @@ void* initCustomer(void* ptr){
     c.enterShop();
     waitingRoomQ.push(id);
     sem_post(&semWaitingRoom);
+
+    while(!(waitingRoomQ.front() == id && couchQ.size() < n_chrs)) continue;
 
     sem_wait(&semWaitingRoom);
     waitingRoomQ.pop();
@@ -143,7 +143,7 @@ void* initBarber(void* ptr){
 void initGatekeeper(int n_cstmrs){
     Gatekeeper g;
     while(n_cstmrs > 0){
-        if(!outsideQ.empty()){
+        if(!outsideQ.empty() && waitingRoomQ.size() < n_wtRoom){
             int nextCust;
 
             sem_wait(&semOutside);
@@ -190,13 +190,12 @@ int main(int argc, char *argv[]){
     sem_init(&semClean, 0, INITIAL_VALUE);
     sem_init(&semCstmrStatus, 0, INITIAL_VALUE);
     sem_init(&semLeave, 0, INITIAL_VALUE);
+    sem_init(&semSTDOUT, 0, INITIAL_VALUE);
 
     mem(cstmrStatus, 0);
     repp(i, MAX_CSTMRS) cstmrBRBR[i] = -1;
 
     int n_cstmrs;
-
-
 
     cerr<<"Done with initialising\n";
     rep(i, 1, argc){
