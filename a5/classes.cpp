@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-queue<int> couchQ;
+// queue<int> couchQ;
 
 class Customer{
     public:
@@ -15,7 +15,7 @@ class Customer{
         }
 
         void sitOnSofa(){
-            couchQ.push(id);
+            // couchQ.push(id);
             cout<<"Customer "<<id<<" sits in the waiting room\n";
         }
 
@@ -28,8 +28,11 @@ class Customer{
         void pay(int barberID){
             cout<<"Customer "<<id<<" leaves barber chair "<<barberID<<" to pay\n";
         }
+        void leaveShop(){
+            cout<<"Customer "<<id<<" leaves the barbershop after paying for the service\n";
+        }
         void exitShop(){
-            cout<<"Customer "<<id<<" exits the barbershop after paying for the service\n";
+            cout<<"Customer "<<id<<" exits the barbershop\n";
         }
 };
 
@@ -46,13 +49,16 @@ class Barber{
 
         void cutHair(int customerID){
             cout<<"Barber "<<id<<" starts haircut of customer "<<customerID<<"\n";
+            std::this_thread::sleep_for (std::chrono::seconds(1));
             cout<<"Barber "<<id<<" finishes haircut of customer "<<customerID<<"\n";
         }
 
         void cleanChair(){
+            std::this_thread::sleep_for (std::chrono::seconds(1));
             cout<<"Barber "<<id<<" is cleaning.\n";
         }
         void acceptPayment(int customerID){
+            std::this_thread::sleep_for (std::chrono::seconds(1));
             cout<<"Barber "<<id<<" recieve payment from customer "<<customerID<<"\n";
         }
 };
