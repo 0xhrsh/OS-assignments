@@ -47,7 +47,7 @@ void* initCustomer(void* ptr){
     outsideQ.push(id);
     sem_post(&semOutside);
 
-    while(cstmrStatus[id]==WAITING_OUTSIDE) continue;
+    while(cstmrStatus[id]!=WAIT_ROOM) continue;
     
     sem_wait(&semWaitingRoom);
     c.enterShop();
@@ -147,12 +147,12 @@ void initGatekeeper(int n_cstmrs){
         if(!outsideQ.empty() && waitingRoomQ.size() < n_wtRoom){
             int nextCust;
 
+            g.giveToken(nextCust);
+
             sem_wait(&semOutside);
             nextCust=outsideQ.front();
             outsideQ.pop();
             sem_post(&semOutside);
-
-            g.giveToken(nextCust);
 
             sem_wait(&semCstmrStatus);
             cstmrStatus[nextCust] = WAIT_ROOM;

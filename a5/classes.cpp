@@ -104,7 +104,7 @@ class Gatekeeper{
 
         void verifyPayment(int customerID){
             sem_wait(&semSTDOUT);
-            cout<<"The cashier receives payment from customer: "<<customerID<<endl;
+            cout<<"The cashier has received payment from customer: "<<customerID<<endl;
             sem_post(&semSTDOUT);
         }
 
