@@ -15,14 +15,14 @@ using namespace std;
 #define MAX_BRBRS 100
 #define MAX_CSTMRS 100
 
-#define WAITING_OUTSIDE 0
-#define WAIT_ROOM 1
-#define SITTING_ON_COUCH 2
-#define BRBR_CHAIR 3
-#define CLEANED_CHAIR 4
-#define READY_TO_PAY 5
-#define PAYMENT_ACCEPTED 6
-#define OUTSIDE 7
+#define WAITING_OUTSIDE 1
+#define WAIT_ROOM 2
+#define SITTING_ON_COUCH 3
+#define BRBR_CHAIR 4
+#define CLEANED_CHAIR 5
+#define READY_TO_PAY 6
+#define PAYMENT_ACCEPTED 7
+#define OUTSIDE 8
 
 Gatekeeper g;
 
@@ -34,8 +34,8 @@ int brbrs_free;
 
 int cstmrStatus[MAX_CSTMRS]; // 0 in chair, 1 cutting done, 2 payment done
 int cstmrBRBR[MAX_CSTMRS];
-int brbrStatus[MAX_BRBRS]; 
-// 0 sleeping, 1 cutting hair, 2 cleaning, 3 collecting money
+
+
 queue<int> outsideQ;
 queue<int> waitingRoomQ;
 queue<int> couchQ;
@@ -72,6 +72,7 @@ void* initCustomer(void* ptr){
 
     sem_wait(&semCouch);
     c.sitOnSofa();
+    couchQ.push(id);
     sem_post(&semCouch);
 
     while(cstmrStatus[id] == SITTING_ON_COUCH) continue;
@@ -79,7 +80,7 @@ void* initCustomer(void* ptr){
     sem_wait(&semCouch);
     couchQ.pop();
     sem_post(&semCouch);
-
+    cerr<<"====here=====\n";
     while(cstmrBRBR[id]==-1) continue;
     int myBRBR = cstmrBRBR[id];
     c.sitInBarberChair(myBRBR);
@@ -160,6 +161,12 @@ int main(int argc, char *argv[]){
     sem_init(&semOutside, 0, INITIAL_VALUE);
     sem_init(&semPayment, 0, INITIAL_VALUE);
     sem_init(&semWaitingRoom, 0, INITIAL_VALUE);
+    sem_init(&semCSTMR_BRBR, 0, INITIAL_VALUE);
+    sem_init(&semClean, 0, INITIAL_VALUE);
+    sem_init(&semCstmrStatus, 0, INITIAL_VALUE);
+
+    mem(cstmrStatus, 0);
+    repp(i, MAX_CSTMRS) cstmrBRBR[i] = -1;
 
     rep(i, 1, argc){
         if(argv[i][0]!='-')continue;
@@ -183,7 +190,7 @@ int main(int argc, char *argv[]){
     cout<<"Enter the number of customers: ";
     cin>>n_cstmrs;
     cout<<n_cstmrs;nl;
-    // input done
+
     pthread_t brbrs[n_brbrs];
     repp(i,n_brbrs){
         brbrs[i] = pthread_t();
@@ -198,9 +205,9 @@ int main(int argc, char *argv[]){
 
     // initGatekeeper(&g);
 
-    repp(k, 10){
+    repp(k, n_cstmrs){
         sem_wait(&semCouch);
-        couchQ.push(k+2);
+        couchQ.push(k);
         sem_post(&semCouch);
     }
 
