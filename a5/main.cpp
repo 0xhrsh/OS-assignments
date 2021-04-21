@@ -25,10 +25,9 @@ using namespace std;
 #define OUTSIDE 8
 
 int capacity;
-
-int n_brbrs=-1, n_chrs=-1, n_wtRoom=-1, n_cstmrs=-1;
-
+int n_brbrs=-1, n_chrs=-1, n_wtRoom=-1;
 int brbrs_free;
+bool gateKeeperPresent = true;
 
 int cstmrStatus[MAX_CSTMRS]; // 0 in chair, 1 cutting done, 2 payment done
 int cstmrBRBR[MAX_CSTMRS];
@@ -37,9 +36,10 @@ int cstmrBRBR[MAX_CSTMRS];
 queue<int> outsideQ;
 queue<int> waitingRoomQ;
 queue<int> couchQ;
+queue<int> leaveQ;
 
 const int INITIAL_VALUE = 1;
-sem_t semCouch, semOutside, semWaitingRoom, semPayment, semCSTMR_BRBR, semClean, semCstmrStatus;
+sem_t semCouch, semOutside, semWaitingRoom, semPayment, semCSTMR_BRBR, semClean, semCstmrStatus, semLeave;
 
 void* initCustomer(void* ptr){
     int id = *(int *)(&ptr);
@@ -55,8 +55,6 @@ void* initCustomer(void* ptr){
     c.enterShop();
     waitingRoomQ.push(id);
     sem_post(&semWaitingRoom);
-
-    // while(!(couchQ.size() < n_chrs && waitingRoomQ.front() == id))continue;
 
     sem_wait(&semWaitingRoom);
     waitingRoomQ.pop();
@@ -84,22 +82,28 @@ void* initCustomer(void* ptr){
     c.pay(myBRBR);
     while(cstmrStatus[id]!=PAYMENT_ACCEPTED)continue;
 
+    sem_wait(&semLeave);
+    c.leaveShop();
+    leaveQ.push(id);
+    sem_post(&semLeave);
+
     c.exitShop();
 }
 
 void* initBarber(void* ptr){
     int id = *(int *)(&ptr);
     Barber b(id);
-    
-    b.sleep();
-    while(true){
+    bool awake = true;
+
+    while(gateKeeperPresent){
         // wait for customer to show up
-        sem_wait(&semCouch);
         if(couchQ.empty()){
-            sem_post(&semCouch);
-            // cerr<<"couch is empty\n";
+            if(awake) b.sleep();
             continue;
         }
+        awake = true;
+
+        sem_wait(&semCouch);
         int myCstmr = couchQ.front();
         couchQ.pop();
         sem_post(&semCouch);
@@ -131,26 +135,44 @@ void* initBarber(void* ptr){
 
         sem_wait(&semCstmrStatus);
         cstmrStatus[myCstmr]=PAYMENT_ACCEPTED;
-        sem_post(&semCstmrStatus);
-
-        b.sleep();
+        sem_post(&semCstmrStatus);        
     }
 }
 
-void initGatekeeper(){
+void initGatekeeper(int n_cstmrs){
     Gatekeeper g;
-    while(true){
-        if(outsideQ.empty()) continue;
-        int next;
-        sem_wait(&semOutside);
-            next=outsideQ.front();
-            outsideQ.pop();
-        sem_post(&semOutside);
+    while(n_cstmrs > 0){
+        if(!outsideQ.empty()){
+            int nextCust;
 
-        sem_wait(&semCstmrStatus);
-            cstmrStatus[next] = WAIT_ROOM;
-        sem_post(&semCstmrStatus);
+            sem_wait(&semOutside);
+            nextCust=outsideQ.front();
+            outsideQ.pop();
+            sem_post(&semOutside);
+
+            g.giveToken(nextCust);
+
+            sem_wait(&semCstmrStatus);
+            cstmrStatus[nextCust] = WAIT_ROOM;
+            sem_post(&semCstmrStatus);
+        }
+
+        if(!leaveQ.empty()){
+            int leavingCust = leaveQ.front();
+            if(cstmrStatus[leavingCust]==PAYMENT_ACCEPTED){
+                cout<<"The cashier receives payment from customer: "<<leavingCust<<endl;
+            }
+            g.takeToken(leavingCust);
+            
+            sem_wait(&semLeave);
+            leaveQ.pop();
+            sem_post(&semLeave);
+            
+            n_cstmrs--;
+        }
+        
     }
+    gateKeeperPresent = false;
     return;
 }
 
@@ -163,9 +185,15 @@ int main(int argc, char *argv[]){
     sem_init(&semCSTMR_BRBR, 0, INITIAL_VALUE);
     sem_init(&semClean, 0, INITIAL_VALUE);
     sem_init(&semCstmrStatus, 0, INITIAL_VALUE);
+    sem_init(&semLeave, 0, INITIAL_VALUE);
 
     mem(cstmrStatus, 0);
     repp(i, MAX_CSTMRS) cstmrBRBR[i] = -1;
+
+    int n_cstmrs;
+
+
+
     cerr<<"Done with initialising\n";
     rep(i, 1, argc){
         if(argv[i][0]!='-')continue;
@@ -188,7 +216,6 @@ int main(int argc, char *argv[]){
 
     cout<<"Enter the number of customers: ";
     cin>>n_cstmrs;
-    cout<<n_cstmrs;nl;
 
     pthread_t brbrs[n_brbrs];
     repp(i,n_brbrs){
@@ -202,7 +229,7 @@ int main(int argc, char *argv[]){
         pthread_create( &cstmrs[i], NULL, initCustomer,(void*) i);
     }
 
-    initGatekeeper();
+    initGatekeeper(n_cstmrs);
 
     repp(i, n_brbrs)
         pthread_join(brbrs[i], NULL);
