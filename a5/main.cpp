@@ -6,7 +6,6 @@ using namespace std;
 
 #define mem(v,i) memset(v,i,sizeof(v)) //Use mem(v,60) to initialize with 10^9
 
-#define nl cout<<endl
 #define el cerr<<endl
 
 #define repp(i,n) for(int i=(0);i<(n);i++)
@@ -22,7 +21,8 @@ using namespace std;
 #define CLEANED_CHAIR 5
 #define READY_TO_PAY 6
 #define PAYMENT_ACCEPTED 7
-#define OUTSIDE 8
+#define CAN_EXIT 8
+#define OUTSIDE 9
 
 int capacity;
 int n_brbrs=-1, n_chrs=-1, n_wtRoom=-1;
@@ -87,6 +87,7 @@ void* initCustomer(void* ptr){
     leaveQ.push(id);
     sem_post(&semLeave);
 
+    while(cstmrStatus[id] != CAN_EXIT)continue;
     c.exitShop();
 }
 
@@ -160,17 +161,20 @@ void initGatekeeper(int n_cstmrs){
         if(!leaveQ.empty()){
             int leavingCust = leaveQ.front();
             if(cstmrStatus[leavingCust]==PAYMENT_ACCEPTED){
-                cout<<"The cashier receives payment from customer: "<<leavingCust<<endl;
+                g.verifyPayment(leavingCust);
             }
             g.takeToken(leavingCust);
             
             sem_wait(&semLeave);
             leaveQ.pop();
             sem_post(&semLeave);
+
+            sem_wait(&semCstmrStatus);
+            cstmrStatus[leavingCust] = CAN_EXIT;
+            sem_post(&semCstmrStatus);
             
             n_cstmrs--;
         }
-        
     }
     gateKeeperPresent = false;
     return;
@@ -212,9 +216,8 @@ int main(int argc, char *argv[]){
             break;
         }
     }
-    cout<<n_brbrs<<" "<<n_chrs<<" "<<n_wtRoom;nl;
 
-    cout<<"Enter the number of customers: ";
+    cerr<<"Enter the number of customers: ";
     cin>>n_cstmrs;
 
     pthread_t brbrs[n_brbrs];

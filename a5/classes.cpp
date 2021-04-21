@@ -77,9 +77,12 @@ class Gatekeeper{
             cout<<"customer "<<customerID<<" takes token\n";
         }
 
+        void verifyPayment(int customerID){
+            cout<<"The cashier receives payment from customer: "<<customerID<<endl;
+        }
+
         void takeToken(int customerID){
             tokens_issued--;
             cout<<"The customer "<<customerID<<" submits the token to the gatekeeper.\n";
-            cout<<"The customer "<<customerID<<" leaves the shop.\n";
         }
 };
