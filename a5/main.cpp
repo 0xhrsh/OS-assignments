@@ -24,8 +24,6 @@ using namespace std;
 #define PAYMENT_ACCEPTED 7
 #define OUTSIDE 8
 
-Gatekeeper g;
-
 int capacity;
 
 int n_brbrs=-1, n_chrs=-1, n_wtRoom=-1, n_cstmrs=-1;
@@ -47,20 +45,14 @@ void* initCustomer(void* ptr){
     int id = *(int *)(&ptr);
     Customer c(id);
 
-    // sem_wait(&semOutside);
-    // outsideQ.push(id);
-    // sem_post(&semOutside);
+    sem_wait(&semOutside);
+    outsideQ.push(id);
+    sem_post(&semOutside);
 
-    // while(!(g.tokens_issued < capacity && outsideQ.front() == id))continue;
-
-    // sem_wait(&semOutside);
-    // outsideQ.pop();
-    // sem_post(&semOutside);
-
-    g.giveToken(id);
-    c.enterShop();
+    while(cstmrStatus[id]==WAITING_OUTSIDE) continue;
     
     sem_wait(&semWaitingRoom);
+    c.enterShop();
     waitingRoomQ.push(id);
     sem_post(&semWaitingRoom);
 
@@ -71,16 +63,13 @@ void* initCustomer(void* ptr){
     sem_post(&semWaitingRoom);
 
     sem_wait(&semCouch);
-    c.sitOnSofa();
     couchQ.push(id);
+    c.sitOnSofa();
+    
     sem_post(&semCouch);
 
     while(cstmrStatus[id] == SITTING_ON_COUCH) continue;
 
-    sem_wait(&semCouch);
-    couchQ.pop();
-    sem_post(&semCouch);
-    cerr<<"====here=====\n";
     while(cstmrBRBR[id]==-1) continue;
     int myBRBR = cstmrBRBR[id];
     c.sitInBarberChair(myBRBR);
@@ -108,49 +97,59 @@ void* initBarber(void* ptr){
         sem_wait(&semCouch);
         if(couchQ.empty()){
             sem_post(&semCouch);
+            // cerr<<"couch is empty\n";
             continue;
         }
-        int cstmr = couchQ.front();
+        int myCstmr = couchQ.front();
         couchQ.pop();
         sem_post(&semCouch);
 
         sem_wait(&semCstmrStatus);
-        cstmrStatus[cstmr]=BRBR_CHAIR;
+        cstmrStatus[myCstmr]=BRBR_CHAIR;
         sem_post(&semCstmrStatus);
 
         sem_wait(&semCSTMR_BRBR);
-        cstmrBRBR[cstmr] = id;
+        cstmrBRBR[myCstmr] = id;
+        // cerr<<endl<<cstmrBRBR[myCstmr]<<" with cut the hair of: "<<myCstmr<<endl<<endl;
         sem_post(&semCSTMR_BRBR);
 
-        b.cutHair(cstmr);
+        b.cutHair(myCstmr);
 
         sem_wait(&semClean);
         b.cleanChair();
         sem_post(&semClean);
 
         sem_wait(&semCstmrStatus);
-        cstmrStatus[cstmr]=CLEANED_CHAIR;
+        cstmrStatus[myCstmr]=CLEANED_CHAIR;
         sem_post(&semCstmrStatus);
 
-        while(cstmrStatus[cstmr]!=READY_TO_PAY)continue;
+        while(cstmrStatus[myCstmr]!=READY_TO_PAY)continue;
 
         sem_wait(&semPayment);
-        b.acceptPayment(cstmr);
+        b.acceptPayment(myCstmr);
         sem_post(&semPayment);
 
         sem_wait(&semCstmrStatus);
-        cstmrStatus[cstmr]=PAYMENT_ACCEPTED;
+        cstmrStatus[myCstmr]=PAYMENT_ACCEPTED;
         sem_post(&semCstmrStatus);
 
         b.sleep();
     }
 }
 
-void initGatekeeper(Gatekeeper* g){
+void initGatekeeper(){
+    Gatekeeper g;
     while(true){
-        // see if any customer paid
-        int cstmr;
-        g->takeToken(cstmr);
+        if(outsideQ.empty()) continue;
+        int next;
+        sem_wait(&semOutside);
+            next=outsideQ.front();
+            outsideQ.pop();
+        sem_post(&semOutside);
+
+        sem_wait(&semCstmrStatus);
+            cstmrStatus[next] = WAIT_ROOM;
+        sem_post(&semCstmrStatus);
     }
     return;
 }
@@ -167,7 +166,7 @@ int main(int argc, char *argv[]){
 
     mem(cstmrStatus, 0);
     repp(i, MAX_CSTMRS) cstmrBRBR[i] = -1;
-
+    cerr<<"Done with initialising\n";
     rep(i, 1, argc){
         if(argv[i][0]!='-')continue;
         switch (argv[i][1]){
@@ -203,13 +202,7 @@ int main(int argc, char *argv[]){
         pthread_create( &cstmrs[i], NULL, initCustomer,(void*) i);
     }
 
-    // initGatekeeper(&g);
-
-    repp(k, n_cstmrs){
-        sem_wait(&semCouch);
-        couchQ.push(k);
-        sem_post(&semCouch);
-    }
+    initGatekeeper();
 
     repp(i, n_brbrs)
         pthread_join(brbrs[i], NULL);
