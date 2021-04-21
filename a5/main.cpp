@@ -54,21 +54,24 @@ void* initCustomer(void* ptr){
     waitingRoomQ.push(id);
     sem_post(&semWaitingRoom);
 
-    while(!(waitingRoomQ.front() == id && couchQ.size() < n_chrs)) continue;
+    while(!(waitingRoomQ.front() == id)) continue;
 
-    sem_wait(&semWaitingRoom);
-    waitingRoomQ.pop();
-    sem_post(&semWaitingRoom);
+    while(true){
+        if(couchQ.size() < n_chrs){
+            sem_wait(&semCouch);
+            couchQ.push(id);
+            c.sitOnSofa();
+            sem_post(&semCouch);
 
-    sem_wait(&semCouch);
-    couchQ.push(id);
-    c.sitOnSofa();
-    sem_post(&semCouch);
+            sem_wait(&semWaitingRoom);
+            waitingRoomQ.pop();
+            sem_post(&semWaitingRoom);
+
+            break;
+        }
+    }
 
     while(couchQ.front()!=id) continue;
-    sem_wait(&semCouch);
-    couchQ.pop();
-    sem_post(&semCouch);
 
     int myBRBR = -1;
     while(myBRBR==-1){
@@ -85,11 +88,14 @@ void* initCustomer(void* ptr){
         }
     }
 
+    sem_wait(&semCouch);
+    couchQ.pop();
+    sem_post(&semCouch);
+
     sem_wait(&semCstmrStatus);
     cstmrStatus[id] = BRBR_CHAIR;
     sem_post(&semCstmrStatus);
     
-
     c.waitforPayment();
     while(cstmrStatus[id]!=CLEANED_CHAIR)continue;
 
@@ -154,7 +160,7 @@ void* initBarber(void* ptr){
 void initGatekeeper(int n_cstmrs){
     Gatekeeper g;
     while(n_cstmrs > 0){
-        if(!outsideQ.empty() && waitingRoomQ.size() < n_wtRoom){
+        if((!outsideQ.empty()) && g.tokens_issued < n_wtRoom + n_chrs + n_brbrs){
             int nextCust;
 
             sem_wait(&semOutside);
@@ -249,6 +255,6 @@ int main(int argc, char *argv[]){
     cerr<<"All customers done\n";
     repp(i, n_brbrs)
         pthread_join(brbrs[i], NULL);
-    
+
     return 0;
 }
