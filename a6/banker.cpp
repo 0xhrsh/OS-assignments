@@ -57,8 +57,7 @@ int main(){
                 repp(t, m)
                     avail[t] += alloc[i][t];
                 finished[i] = true;
-            }
-            
+            }       
         }
     }
 
