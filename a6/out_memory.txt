@@ -1,0 +1,17 @@
+Enter the number of frames: Enter the pages(positive integers) space seperated: 
+
+Page Faults in FIFO: 9
+Page Faults in LRU: 8
+Page Faults in OPR: 6
+
+Checking for Belady’s anomaly
+Please enter the number of simulations: 
+Belady’s Anomaly detected.
+	Number of frames: 14	Faults: 38
+	Number of frames: 15	Faults: 40
+Belady’s Anomaly detected.
+	Number of frames: 13	Faults: 43
+	Number of frames: 14	Faults: 45
+Belady’s Anomaly detected.
+	Number of frames: 11	Faults: 52
+	Number of frames: 12	Faults: 53

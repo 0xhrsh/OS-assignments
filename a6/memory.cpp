@@ -7,7 +7,11 @@ using namespace std;
 #define nl cout<<endl
 #define el cerr<<endl
 
+#define rStringLen 100
+#define pageTypes 20
+
 #define repp(i,n) for(int i=(0);i<(n);i++)
+#define rep(i,a,n) for(int i=(a);i<(n);i++)
 
 int pgFaultsFIFO(vector<int> pages, int capacity){
     int n = pages.size();
@@ -33,7 +37,7 @@ int pgFaultsFIFO(vector<int> pages, int capacity){
         pgFault++;
         // cerr<<page<<endl;
     }
-    cerr<<endl;
+    // cerr<<endl;
     return pgFault;
 }
 
@@ -121,33 +125,54 @@ int pgFaultsOPR(vector<int> pages, int capacity){
 }
 
 int main(){
-    int n;
-    cout<<"Enter n: ";
-    cin>>n;
-    repp(i, n){
-        int n_frames;
-        cout<<"Enter the number of frames: ";
-        cin>>n_frames;
 
-        vector<int> rString;
+    int n_frames;
+    cout<<"Enter the number of frames: ";
+    cin>>n_frames;
 
-        cout<<"Enter the pages(positive integers) space seperated: ";
+    vector<int> rString;
 
-        while (true) {
-            int temp;
-            cin >> temp;
-            if(temp == -1) break;
+    cout<<"Enter the pages(positive integers) space seperated: \n";
 
-            rString.push_back(temp);
-            if (cin.peek() == '\n') {
-                break;
-            }
+    while (true) {
+        int temp;
+        cin >> temp;
+        if(temp == -1) break;
+
+        rString.push_back(temp);
+        if (cin.peek() == '\n') {
+            break;
         }
-
-        cout<<"Page Faults in FIFO: "<<pgFaultsFIFO(rString, n_frames)<<endl;
-        cout<<"Page Faults in LRU: "<<pgFaultsLRU(rString, n_frames)<<endl;
-        cout<<"Page Faults in OPR: "<<pgFaultsOPR(rString, n_frames)<<endl;
     }
+    nl;
+    cout<<"Page Faults in FIFO: "<<pgFaultsFIFO(rString, n_frames)<<endl;
+    cout<<"Page Faults in LRU: "<<pgFaultsLRU(rString, n_frames)<<endl;
+    cout<<"Page Faults in OPR: "<<pgFaultsOPR(rString, n_frames)<<endl;
     
+    cout<<"\nChecking for Belady’s anomaly\nPlease enter the number of simulations: ";
+    int n;
+    cin>>n;
+    nl;
+
+    srand(time(0));
+
+    repp(i,n){
+        int inp_string;
+        rString.clear();
+
+        repp(j, rStringLen) rString.push_back(rand()%pageTypes);
+
+        int lastFault = INT_MAX;
+
+        rep(j, 2, rStringLen/5){
+            int currFault = pgFaultsFIFO(rString, j);
+            if(currFault>lastFault){
+                cout<<"Belady’s Anomaly detected.\n";
+                cout<<"\tNumber of frames: "<<j-1<<"\tFaults: "<<lastFault;nl;
+                cout<<"\tNumber of frames: "<<j<<"\tFaults: "<<currFault;nl;
+            }
+            lastFault = currFault;
+        }
+    }
     return 0;
 }
