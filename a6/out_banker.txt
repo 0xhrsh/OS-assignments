@@ -1,0 +1,23 @@
+Enter the number of processes: Enter the number of resources: Enter the amount available for each of 3 resources (Space Seperated)
+
+Enter the amount of each resouce currently allocated to process 0 (space seperated)
+Enter the amount of each resouce currently allocated to process 1 (space seperated)
+Enter the amount of each resouce currently allocated to process 2 (space seperated)
+Enter the amount of each resouce currently allocated to process 3 (space seperated)
+Enter the amount of each resouce currently allocated to process 4 (space seperated)
+
+Enter the max amount of each resouce process 0 needs for completion (space seperated)
+Enter the max amount of each resouce process 1 needs for completion (space seperated)
+Enter the max amount of each resouce process 2 needs for completion (space seperated)
+Enter the max amount of each resouce process 3 needs for completion (space seperated)
+Enter the max amount of each resouce process 4 needs for completion (space seperated)
+
+Input State is Safe.
+Safe Sequence: 1 3 4 0 2 
+
+Enter the process id (0 indexed) for new process: 
+Enter the number of instances required for each resource type (space seperated): 
+
+Input State is Safe.
+Safe Sequence: 1 3 4 0 2 
+
