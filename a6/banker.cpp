@@ -5,8 +5,8 @@ using namespace std;
 #define repp(i,n) for(int i=0;i<n;i++)  
 #define nl cout<<endl
 
-#define N_MAX 1000
-#define M_MAX 1000
+#define N_MAX 500
+#define M_MAX 200
 
 int need[N_MAX][M_MAX];
 int alloc[N_MAX][M_MAX];
