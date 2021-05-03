@@ -25,18 +25,19 @@ vector<int> freeFrames;
 vector<vector<int>> occupiedFrames; // frame id, process id, pg
 
 void run_process(int id){
-    int req_len = (rand()%(8*m)) + 2*m;
-
     int mi = 1 + rand()%m;
+    int req_len = (rand()%(8*mi)) + 2*mi;    
 
     repp(i, req_len){
         int pg = rand()%pageRange;
+
+        cout<<"Process P"<<id<<": for page reference "<<pg;
 
         bool foundInTLB = false;
         repp(j, s){
             if(tlb[j][0] == id && tlb[j][1] == pg){
                 foundInTLB = true;
-                cout<<"Process P"<<id<<": for page reference "<<pg<<", TLB hit with frame no. "<<tlb[j][0]<<endl;
+                cout<<", TLB hit with frame no. "<<tlb[j][0]<<endl;
 
                 vector<int> row = tlb[j];
                 tlb.erase(tlb.begin() + j);
@@ -49,7 +50,7 @@ void run_process(int id){
         if(!foundInTLB){
             if(pageTable[id][pg][0]==1){
                 int allocFrame = pageTable[id][pg][1];
-                cout<<"Process P"<<id<<": for page reference "<<pg<<", TLB miss → page table valid→ with frame no. "<<pageTable[id][pg][1];
+                cout<<"TLB miss → page table valid → with frame no. "<<allocFrame<<endl;
 
                 tlb.erase(tlb.begin());
                 tlb.push_back({id, pg, allocFrame});
@@ -57,6 +58,8 @@ void run_process(int id){
             } else {
                 if(freeFrames.size()>0){
                     int allocFrame = freeFrames[0];
+                    cout<<"TLB miss → page fault → free frame allocated frame no: "<<allocFrame<<endl;
+
                     freeFrames.erase(freeFrames.begin());
 
                     pageTable[id][pg][0] = 1;
@@ -72,6 +75,7 @@ void run_process(int id){
                     int old_process = occupiedFrames[0][0];
                     int old_pg = occupiedFrames[0][1];
                     int allocFrame = occupiedFrames[0][2];
+                    cout<<"TLB miss → page fault → frame re-allocated frame no: "<<allocFrame<<endl;
 
                     occupiedFrames.erase(occupiedFrames.begin());
 
@@ -89,10 +93,6 @@ void run_process(int id){
             }
         }
     }
-
-
-
-
 }
 
 
