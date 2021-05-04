@@ -1,7 +1,11 @@
 #include <bits/stdc++.h>
+#include <semaphore.h>
+#include <pthread.h>
 using namespace std;
 
 #define mem(v,i) memset(v,i,sizeof(v)) 
+
+const int INITIAL_VALUE = 1;
 
 #define nl cout<<endl
 #define el cerr<<endl
@@ -13,20 +17,20 @@ using namespace std;
 #define m 20
 #define f 15
 #define s 10
-#define pageRange 10 // should be same as m
+#define pageRange 20 // should be same as m
 
 int pgFlts = 0;
 
 int allocated_memory[k];
 int mi_s[k];
 int t_mi = 0;
-
 int pageTable[k][m][2]; // [process id, page num] -> valid, frame
 
 vector<vector<int>> tlb; // process id, pg, frame
-
 vector<int> freeFrames; // list of frames that are free
 vector<vector<int>> occupiedFrames; // frame id, process id, pg
+
+sem_t getPg, semPrint, sempgFlts;
 
 int frameProportions[k];
 int allocatedFrames[k];
@@ -79,28 +83,36 @@ void initMis(){
     }
 }
 
-void run_process(int id){
+void* run_process(void* ptr){
     srand(0);
-
-    cout<<"Process: P"<<id<<" started!\n";
+    int id = *(int *)(&ptr);
+    
+    
+    cerr<<"Process: P"<<id<<" started!\n";
+    
     
     int req_len = (rand()%(8*mi_s[id])) + 2*mi_s[id];    
 
     repp(i, req_len){
+        ostringstream oss;
         int pg = rand()%pageRange;
         
 
-        cout<<"P"<<id<<": page "<<pg;
-        
+        oss<<"P"<<id<<": page "<<pg;
+        sem_wait(&getPg);
         bool foundInTLB = false;
         repp(j, s){
+            
             if(tlb[j][0] == id && tlb[j][1] == pg){
                 foundInTLB = true;
-                cout<<", TLB hit with frame no. "<<tlb[j][2]<<endl;
+                oss<<", TLB hit with frame no. "<<tlb[j][2]<<endl;
 
                 vector<int> row = tlb[j];
+
+                // sem_wait(&getPg);
                 tlb.erase(tlb.begin() + j);
-                tlb.push_back(row);
+                tlb.push_back(row);                
+                // sem_post(&getPg);
 
                 break;
             }
@@ -108,18 +120,24 @@ void run_process(int id){
 
         if(!foundInTLB){
             if(pageTable[id][pg][0]==1){
+                // sem_wait(&getPg);
                 int allocFrame = pageTable[id][pg][1];
-                cout<<", TLB miss → page table valid → with frame no. "<<allocFrame<<endl;
+                oss<<", TLB miss → page table valid → with frame no. "<<allocFrame<<endl;
 
                 tlb.erase(tlb.begin());
-                tlb.push_back({id, pg, allocFrame});
+                tlb.push_back({id, pg, allocFrame}); 
+                // sem_post(&getPg);              
 
             } else {
+                sem_wait(&sempgFlts);
                 pgFlts++;
+                sem_post(&sempgFlts);
+
                 if(freeFrames.size()>0 && allocatedFrames[id]<frameProportions[id]){ // allocating frames in proportion                    
+                    // sem_wait(&getPg);
 
                     int allocFrame = freeFrames[0];
-                    cout<<", TLB miss → page fault → free frame: "<<allocFrame<<" allocated to it."<<endl;
+                    oss<<", TLB miss → page fault → free frame: "<<allocFrame<<" allocated to it."<<endl;
 
                     freeFrames.erase(freeFrames.begin());
 
@@ -131,6 +149,7 @@ void run_process(int id){
                     
                     tlb.erase(tlb.begin());
                     tlb.push_back({id, pg, allocFrame});
+                    // sem_post(&getPg);
 
 
                 } else {
@@ -147,11 +166,14 @@ void run_process(int id){
                         exit(1);
                     }
 
+                    
+
                     int old_process = occupiedFrames[lruFrameForProcess][0];
                     int old_pg = occupiedFrames[lruFrameForProcess][1];
                     int allocFrame = occupiedFrames[lruFrameForProcess][2];
-                    cout<<", TLB miss → page fault → frame: "<<allocFrame<<" re-allocated to it. (previously alloc to pg: "<<old_pg<<')'<<endl;
+                    oss<<", TLB miss → page fault → frame: "<<allocFrame<<" re-allocated to it. (previously alloc to pg: "<<old_pg<<')'<<endl;
 
+                    // sem_wait(&getPg);
                     occupiedFrames.erase(occupiedFrames.begin() + lruFrameForProcess);
 
                     // allocFrame = pageTable[old_process][old_pg][1];
@@ -177,9 +199,15 @@ void run_process(int id){
                         tlb.erase(tlb.begin());
                         tlb.push_back({id, pg, allocFrame});
                     }
+                    // sem_post(&getPg);
                 }
             }
         }
+
+        sem_post(&getPg);
+        sem_wait(&semPrint);
+        cout<<oss.str();
+        sem_post(&semPrint);
     }
 }
 
@@ -187,6 +215,10 @@ void run_process(int id){
 int main(){
 
     int num_exec = 0;
+
+    sem_init(&getPg, 0, INITIAL_VALUE);
+    sem_init(&semPrint, 0, INITIAL_VALUE);
+    sem_init(&sempgFlts, 0, INITIAL_VALUE);
 
     initMis();
     initTLB();
@@ -197,15 +229,19 @@ int main(){
     mem(pageTable, 0);
 
     srand(0);
+    pthread_t proc[k];
 
     while(num_exec < k){
         int proc_id = rand()%k;
         if(!exec[proc_id]){
-            run_process(num_exec);
+            proc[proc_id] = pthread_t();
+            pthread_create(&proc[proc_id], NULL, run_process,(void*) proc_id);
             num_exec++;
             exec[proc_id] = true;
         }
     }
+
+    repp(i, k) pthread_join(proc[i], NULL);
 
     cout<<"\nAll processes are completed!\nNumber of page faults: "<<pgFlts<<endl;
     
