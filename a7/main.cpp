@@ -15,6 +15,8 @@ using namespace std;
 #define s 2
 #define pageRange 10 // should be same as m
 
+int pgFlts = 0;
+
 int allocated_memory[k];
 
 int pageTable[k][m][2]; // [process id, page num] -> valid, frame
@@ -26,7 +28,8 @@ vector<vector<int>> occupiedFrames; // frame id, process id, pg
 
 void initTLB(){
     repp(i, s){
-        tlb.push_back({rand()%k, rand()%pageRange, rand()%f});
+        // tlb.push_back({rand()%k, rand()%pageRange, rand()%f});
+        tlb.push_back({-1, -1, -1});
         // cerr<<tlb[i][0]<<" "<<tlb[i][1]<<" "<<tlb[i][2]<<endl;
     }
 }
@@ -36,6 +39,7 @@ void initFrames(){
 }
 
 void run_process(int id){
+    cout<<"Process: P"<<id<<" started!\n";
     
     int mi = 1 + rand()%m;
     int req_len = (rand()%(8*mi)) + 2*mi;    
@@ -70,6 +74,8 @@ void run_process(int id){
 
             } else {
                 if(freeFrames.size()>0){
+                    pgFlts++;
+
                     int allocFrame = freeFrames[0];
                     cout<<", TLB miss → page fault → free frame: "<<allocFrame<<" allocated to it."<<endl;
 
@@ -120,6 +126,8 @@ int main(){
         run_process(num_exec);
         num_exec++;
     }
+
+    cout<<"All processes are completed!\nNumber of page faults: "<<pgFlts<<endl;
     
     return 0;
 }
