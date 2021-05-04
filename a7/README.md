@@ -2,6 +2,7 @@
 
 ## Compiling and Executing:
 - ```g++ main.cpp && ./a.out > Result.txt```
+- You can change the values of k, m, f, s from lines 12, 13, 14, 15 of the file ```main.cpp```.   [They have been added in #define for convenience]
 
 ## Interpreting Output
 - ```P0: page 9, TLB miss → page fault → free frame: 0 allocated to it.``` This means:  
