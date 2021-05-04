@@ -14,7 +14,7 @@ Process 0 requested for page 9 which lead to a TBL miss. The page was found in t
 Process 0 requested for page 3 which lead to a TBL miss and a page fault. Frame 0 was then allocated to it, (where frame 0 was previously allocated to page 9)
 
 - ```P0: page 3, TLB hit with frame no. 0```: This means  
-- Process 0 requested for page 3, it was a TBL hit and the page can be found on frame 0.
+Process 0 requested for page 3, it was a TBL hit and the page can be found on frame 0.
 
 ## Assumptions
 - 
