@@ -10,9 +10,9 @@ using namespace std;
 #define repp(i,n) for(int i=(0);i<(n);i++)
 
 #define k 2
-#define m 10
-#define f 6
-#define s 5
+#define m 20
+#define f 15
+#define s 10
 #define pageRange 10 // should be same as m
 
 int pgFlts = 0;
@@ -40,7 +40,7 @@ void initFrames(){
 
     int t_frames = 0;
     repp(i, k){
-        int frames_allocated = (mi_s[i]*s)/t_mi;
+        int frames_allocated = (mi_s[i]*f)/t_mi;
         repp(j, frames_allocated){
             frameProportions[i]++;
             t_frames++;
@@ -70,7 +70,7 @@ void initTLB(){
 
 
 void initMis(){
-    srand(0);
+    srand(21);
 
     repp(i, k){
         int mi = 1 + rand()%m;
@@ -96,7 +96,7 @@ void run_process(int id){
         repp(j, s){
             if(tlb[j][0] == id && tlb[j][1] == pg){
                 foundInTLB = true;
-                cout<<", TLB hit with frame no. "<<tlb[j][0]<<endl;
+                cout<<", TLB hit with frame no. "<<tlb[j][2]<<endl;
 
                 vector<int> row = tlb[j];
                 tlb.erase(tlb.begin() + j);
@@ -135,9 +135,9 @@ void run_process(int id){
 
                 } else {
                     int lruFrameForProcess = -1; // we only find the LRU frame for a process, so that frame proportion is maintained.
-                    repp(i, occupiedFrames.size()){
-                        if(occupiedFrames[i][0] == id){
-                            lruFrameForProcess = i;
+                    repp(lruF, occupiedFrames.size()){
+                        if(occupiedFrames[lruF][0] == id){
+                            lruFrameForProcess = lruF;
                             break;
                         }
                     }
@@ -152,9 +152,9 @@ void run_process(int id){
                     int allocFrame = occupiedFrames[lruFrameForProcess][2];
                     cout<<", TLB miss → page fault → frame: "<<allocFrame<<" re-allocated to it. (previously alloc to pg: "<<old_pg<<')'<<endl;
 
-                    occupiedFrames.erase(occupiedFrames.begin());
+                    occupiedFrames.erase(occupiedFrames.begin() + lruFrameForProcess);
 
-                    // int allocFrame = pageTable[old_process][old_pg][1];
+                    // allocFrame = pageTable[old_process][old_pg][1];
                     pageTable[old_process][old_pg][0] = 0;
 
                     pageTable[id][pg][0] = 1;
@@ -162,8 +162,21 @@ void run_process(int id){
                     
                     occupiedFrames.push_back({id, pg, allocFrame});
                     
-                    tlb.erase(tlb.begin());
-                    tlb.push_back({id, pg, allocFrame});
+                    bool present = false;;
+
+                    repp(iTlb, s){
+                        if(tlb[iTlb][2] == allocFrame){
+                            tlb[iTlb][0] = id;
+                            tlb[iTlb][1] = pg;
+                            tlb[iTlb][2] = allocFrame;
+                            present = true;
+                        }
+                    }
+
+                    if(!present){
+                        tlb.erase(tlb.begin());
+                        tlb.push_back({id, pg, allocFrame});
+                    }
                 }
             }
         }
@@ -181,6 +194,7 @@ int main(){
 
     bool exec[k];
     mem(exec, 0);
+    mem(pageTable, 0);
 
     srand(0);
 
