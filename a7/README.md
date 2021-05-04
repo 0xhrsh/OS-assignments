@@ -17,7 +17,7 @@ Process 0 requested for page 3 which lead to a TBL miss and a page fault. Frame 
 Process 0 requested for page 3, it was a TBL hit and the page can be found on frame 0.
 
 ## Assumptions
-- Each process will be allocated frames more than or equal to the ration of mi to m. If such a distribution is not possible, the program will raise an error.
+- Each process will be allocated non-zero frames out of f such that it's propotion (to f) is more than or equal to the ratio of mi to m. If such a distribution is not possible, the program will raise an error.
 
 ## Bugs
 - No known bugs.
