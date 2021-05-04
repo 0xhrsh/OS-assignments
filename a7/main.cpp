@@ -17,7 +17,7 @@ const int INITIAL_VALUE = 1;
 #define m 20
 #define f 15
 #define s 10
-#define pageRange 20 // should be same as m
+#define pageRange m // should be same as m
 
 int pgFlts = 0;
 
@@ -28,7 +28,7 @@ int pageTable[k][m][2]; // [process id, page num] -> valid, frame
 
 vector<vector<int>> tlb; // process id, pg, frame
 vector<int> freeFrames; // list of frames that are free
-vector<vector<int>> occupiedFrames; // frame id, process id, pg
+vector<vector<int>> occupiedFrames; // process id, pg, frame
 
 sem_t getPg, semPrint, sempgFlts;
 
@@ -48,8 +48,7 @@ void initFrames(){
         repp(j, frames_allocated){
             frameProportions[i]++;
             t_frames++;
-        }
-            
+        }      
         
         if(frames_allocated == 0){ // if 0 frames are there in proportion
             frameProportions[i] = 1; // we give the process 1 frame   
@@ -83,6 +82,18 @@ void initMis(){
     }
 }
 
+void updateFrameLRU(int frame_id){
+    repp(lruF, occupiedFrames.size()){
+        if(occupiedFrames[lruF][2] == frame_id){
+            int proc_id = occupiedFrames[lruF][0];
+            int pg = occupiedFrames[lruF][1];
+            occupiedFrames.erase(occupiedFrames.begin() + lruF);
+            occupiedFrames.push_back({proc_id, pg, frame_id});
+            break;
+        }
+    }
+}
+
 void* run_process(void* ptr){
     srand(0);
     int id = *(int *)(&ptr);
@@ -107,12 +118,11 @@ void* run_process(void* ptr){
                 foundInTLB = true;
                 oss<<", TLB hit with frame no. "<<tlb[j][2]<<endl;
 
-                vector<int> row = tlb[j];
+                updateFrameLRU(tlb[j][2]);
 
-                // sem_wait(&getPg);
-                tlb.erase(tlb.begin() + j);
+                vector<int> row = tlb[j];
+                tlb.erase(tlb.begin() + j); // update TLB LRU 
                 tlb.push_back(row);                
-                // sem_post(&getPg);
 
                 break;
             }
@@ -120,13 +130,14 @@ void* run_process(void* ptr){
 
         if(!foundInTLB){
             if(pageTable[id][pg][0]==1){
-                // sem_wait(&getPg);
                 int allocFrame = pageTable[id][pg][1];
                 oss<<", TLB miss → page table valid → with frame no. "<<allocFrame<<endl;
 
-                tlb.erase(tlb.begin());
+                updateFrameLRU(allocFrame);
+
+                tlb.erase(tlb.begin()); // Get LRU of TBL
                 tlb.push_back({id, pg, allocFrame}); 
-                // sem_post(&getPg);              
+                
 
             } else {
                 sem_wait(&sempgFlts);
@@ -134,7 +145,6 @@ void* run_process(void* ptr){
                 sem_post(&sempgFlts);
 
                 if(freeFrames.size()>0 && allocatedFrames[id]<frameProportions[id]){ // allocating frames in proportion                    
-                    // sem_wait(&getPg);
 
                     int allocFrame = freeFrames[0];
                     oss<<", TLB miss → page fault → free frame: "<<allocFrame<<" allocated to it."<<endl;
@@ -149,7 +159,6 @@ void* run_process(void* ptr){
                     
                     tlb.erase(tlb.begin());
                     tlb.push_back({id, pg, allocFrame});
-                    // sem_post(&getPg);
 
 
                 } else {
@@ -166,14 +175,12 @@ void* run_process(void* ptr){
                         exit(1);
                     }
 
-                    
-
                     int old_process = occupiedFrames[lruFrameForProcess][0];
                     int old_pg = occupiedFrames[lruFrameForProcess][1];
                     int allocFrame = occupiedFrames[lruFrameForProcess][2];
                     oss<<", TLB miss → page fault → frame: "<<allocFrame<<" re-allocated to it. (previously alloc to pg: "<<old_pg<<')'<<endl;
 
-                    // sem_wait(&getPg);
+                    
                     occupiedFrames.erase(occupiedFrames.begin() + lruFrameForProcess);
 
                     // allocFrame = pageTable[old_process][old_pg][1];
@@ -199,7 +206,6 @@ void* run_process(void* ptr){
                         tlb.erase(tlb.begin());
                         tlb.push_back({id, pg, allocFrame});
                     }
-                    // sem_post(&getPg);
                 }
             }
         }

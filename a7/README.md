@@ -1,8 +1,8 @@
 # Assignment 7
 
 ## Compiling and Executing:
-- ```g++ main.cpp && ./a.out > Result.txt```
-- You can change the values of k, m, f, s from lines 12, 13, 14, 15 of the file ```main.cpp```.   [They have been added in #define for convenience]
+- ```g++ main.cpp -pthread && ./a.out > Result.txt```
+- You can change the values of k, m, f, s from lines 16, 17, 18, 19 of the file ```main.cpp```.   [They have been added in #define for convenience]
 
 ## Interpreting Output
 - ```P0: page 9, TLB miss → page fault → free frame: 0 allocated to it.``` This means:  
@@ -19,6 +19,8 @@ Process 0 requested for page 3, it was a TBL hit and the page can be found on fr
 
 ## Assumptions
 - Each process will be allocated non-zero frames out of f such that it's propotion (to f) is more than or equal to the ratio of mi to m. If such a distribution is not possible, the program will raise an error.
+- Degree of Multiprogramming is k.
+
 
 ## Bugs
 - No known bugs.
