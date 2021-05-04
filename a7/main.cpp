@@ -15,8 +15,8 @@ const int INITIAL_VALUE = 1;
 
 #define k 2
 #define m 20
-#define f 15
-#define s 10
+#define f 18
+#define s 15
 #define pageRange m // should be same as m
 
 int pgFlts = 0;
@@ -73,8 +73,6 @@ void initTLB(){
 
 
 void initMis(){
-    srand(21);
-
     repp(i, k){
         int mi = 1 + rand()%m;
         mi_s[i] = mi;
@@ -95,7 +93,7 @@ void updateFrameLRU(int frame_id){
 }
 
 void* run_process(void* ptr){
-    srand(0);
+    srand(420);
     int id = *(int *)(&ptr);
     
     
@@ -219,7 +217,7 @@ void* run_process(void* ptr){
 
 
 int main(){
-
+    srand(69);
     int num_exec = 0;
 
     sem_init(&getPg, 0, INITIAL_VALUE);
@@ -234,7 +232,7 @@ int main(){
     mem(exec, 0);
     mem(pageTable, 0);
 
-    srand(0);
+    
     pthread_t proc[k];
 
     while(num_exec < k){

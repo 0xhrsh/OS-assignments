@@ -1,275 +1,195 @@
-P1: page 6, TLB miss → page fault → free frame: 0 allocated to it.
-P0: page 6, TLB miss → page fault → free frame: 1 allocated to it.
-P0: page 15, TLB miss → page fault → free frame: 2 allocated to it.
-P0: page 13, TLB miss → page fault → free frame: 3 allocated to it.
-P0: page 15, TLB hit with frame no. 2
-P0: page 6, TLB hit with frame no. 1
-P0: page 12, TLB miss → page fault → free frame: 4 allocated to it.
-P0: page 9, TLB miss → page fault → free frame: 5 allocated to it.
-P0: page 1, TLB miss → page fault → free frame: 6 allocated to it.
-P0: page 2, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 13)
-P0: page 7, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 15)
-P0: page 10, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 6)
-P0: page 19, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 12)
-P0: page 3, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 9)
-P0: page 6, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 1)
-P0: page 0, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 2)
-P0: page 6, TLB hit with frame no. 6
-P0: page 12, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 7)
-P0: page 16, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 10)
-P0: page 11, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 19)
-P1: page 17, TLB miss → page fault → free frame: 7 allocated to it.
-P1: page 7, TLB miss → page fault → free frame: 8 allocated to it.
-P1: page 9, TLB miss → page fault → free frame: 9 allocated to it.
-P1: page 2, TLB miss → page fault → free frame: 10 allocated to it.
-P1: page 10, TLB miss → page fault → free frame: 11 allocated to it.
-P1: page 2, TLB hit with frame no. 10
-P1: page 3, TLB miss → page fault → free frame: 12 allocated to it.
-P1: page 7, TLB hit with frame no. 8
-P1: page 15, TLB miss → page fault → free frame: 13 allocated to it.
-P1: page 9, TLB hit with frame no. 9
-P1: page 2, TLB hit with frame no. 10
-P1: page 2, TLB hit with frame no. 10
-P0: page 8, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 3)
-P0: page 9, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 0)
-P0: page 7, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 6)
-P0: page 13, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 12)
-P0: page 16, TLB miss → page table valid → with frame no. 1
-P0: page 11, TLB miss → page table valid → with frame no. 4
-P0: page 2, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 8)
-P0: page 9, TLB hit with frame no. 3
-P0: page 13, TLB hit with frame no. 2
-P0: page 1, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 7)
-P0: page 19, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 16)
-P0: page 4, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 11)
-P0: page 17, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 2)
-P0: page 18, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 9)
-P0: page 4, TLB hit with frame no. 4
-P0: page 15, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 13)
-P0: page 10, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 1)
-P0: page 13, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 19)
-P0: page 6, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 17)
-P0: page 11, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 18)
-P0: page 0, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 4)
-P0: page 16, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 15)
-P1: page 18, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 6)
-P0: page 13, TLB hit with frame no. 1
-P0: page 10, TLB hit with frame no. 6
-P0: page 16, TLB hit with frame no. 2
-P1: page 2, TLB hit with frame no. 10
-P1: page 5, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 17)
-P1: page 5, TLB hit with frame no. 7
-P0: page 1, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 6)
-P0: page 7, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 11)
-P0: page 16, TLB hit with frame no. 2
-P0: page 5, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 0)
-P0: page 6, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 13)
-P0: page 9, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 10)
-P0: page 13, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 1)
-P0: page 17, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 7)
-P0: page 4, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 16)
-P0: page 15, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 5)
-P0: page 2, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 6)
-P0: page 5, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 9)
-P0: page 14, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 13)
-P0: page 7, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 17)
-P0: page 14, TLB hit with frame no. 5
-P0: page 4, TLB hit with frame no. 2
-P0: page 3, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 15)
-P0: page 10, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 2)
-P0: page 7, TLB hit with frame no. 3
-P0: page 8, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 5)
-P0: page 16, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 14)
-P0: page 18, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 4)
-P0: page 8, TLB hit with frame no. 6
-P0: page 4, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 3)
-P0: page 3, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 10)
-P0: page 11, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 7)
-P0: page 14, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 16)
-P0: page 19, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 18)
-P0: page 12, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 8)
-P0: page 0, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 4)
-P0: page 16, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 3)
-P0: page 8, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 11)
-P0: page 19, TLB hit with frame no. 2
-P0: page 12, TLB hit with frame no. 6
-P0: page 6, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 14)
-P1: page 4, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 10)
-P1: page 14, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 3)
-P1: page 19, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 7)
-P1: page 15, TLB miss → page table valid → with frame no. 13
-P1: page 10, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 9)
-P1: page 14, TLB hit with frame no. 12
-P1: page 18, TLB miss → page table valid → with frame no. 0
-P1: page 7, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 2)
-P0: page 6, TLB miss → page table valid → with frame no. 5
-P1: page 1, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 5)
-P1: page 2, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 4)
-P1: page 17, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 19)
-P1: page 12, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 15)
-P1: page 12, TLB hit with frame no. 13
-P1: page 16, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 10)
-P1: page 1, TLB hit with frame no. 7
-P1: page 0, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 14)
-P1: page 6, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 18)
-P1: page 1, TLB hit with frame no. 7
-P1: page 5, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 7)
-P1: page 9, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 2)
-P1: page 4, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 17)
-P1: page 19, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 12)
-P1: page 0, TLB hit with frame no. 12
-P1: page 9, TLB hit with frame no. 11
-P1: page 11, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 16)
-P1: page 17, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 6)
-P1: page 17, TLB hit with frame no. 0
-P1: page 11, TLB hit with frame no. 9
-P1: page 1, TLB hit with frame no. 7
-P1: page 15, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 5)
-P1: page 9, TLB hit with frame no. 11
-P1: page 7, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 4)
-P1: page 7, TLB hit with frame no. 8
-P1: page 16, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 19)
-P1: page 17, TLB hit with frame no. 0
-P1: page 13, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 0)
-P1: page 6, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 11)
-P1: page 5, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 1)
-P1: page 6, TLB hit with frame no. 9
-P1: page 3, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 15)
-P1: page 19, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 9)
-P1: page 4, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 7)
-P1: page 8, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 16)
-P1: page 11, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 17)
-P1: page 12, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 13)
-P1: page 9, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 5)
-P1: page 3, TLB hit with frame no. 10
-P1: page 19, TLB hit with frame no. 11
-P1: page 10, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 6)
-P1: page 8, TLB hit with frame no. 13
-P1: page 8, TLB hit with frame no. 13
-P1: page 15, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 4)
-P1: page 0, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 11)
-P1: page 9, TLB hit with frame no. 7
-P1: page 16, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 12)
-P1: page 3, TLB hit with frame no. 10
-P1: page 18, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 19)
-P1: page 5, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 10)
-P1: page 6, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 8)
-P1: page 11, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 15)
-P0: page 17, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 0)
-P1: page 1, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 0)
-P0: page 15, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 16)
-P0: page 8, TLB miss → page table valid → with frame no. 3
-P0: page 4, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 19)
-P0: page 8, TLB hit with frame no. 3
-P0: page 1, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 12)
-P0: page 10, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 6)
-P0: page 13, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 17)
-P0: page 0, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 15)
-P0: page 14, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 4)
-P1: page 19, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 9)
-P1: page 4, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 16)
-P1: page 14, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 3)
-P1: page 7, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 18)
-P1: page 16, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 5)
-P1: page 3, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 6)
-P1: page 11, TLB miss → page table valid → with frame no. 8
-P1: page 7, TLB hit with frame no. 11
-P1: page 5, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 1)
-P1: page 19, TLB miss → page table valid → with frame no. 7
-P1: page 16, TLB hit with frame no. 9
-P1: page 12, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 4)
-P1: page 11, TLB hit with frame no. 8
-P1: page 17, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 14)
-P1: page 8, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 3)
-P1: page 15, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 7)
-P1: page 7, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 5)
-P1: page 14, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 19)
-P1: page 1, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 16)
-P1: page 18, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 12)
-P1: page 15, TLB hit with frame no. 11
-P1: page 9, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 11)
-P1: page 17, TLB hit with frame no. 10
-P1: page 15, TLB hit with frame no. 11
-P1: page 13, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 8)
-P1: page 18, TLB hit with frame no. 12
-P1: page 8, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 7)
-P1: page 3, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 14)
-P1: page 11, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 1)
-P1: page 8, TLB hit with frame no. 0
-P1: page 9, TLB hit with frame no. 8
-P1: page 16, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 17)
-P1: page 4, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 15)
+P0: page 9, TLB miss → page fault → free frame: 0 allocated to it.
+P1: page 9, TLB miss → page fault → free frame: 1 allocated to it.
+P1: page 19, TLB miss → page fault → free frame: 2 allocated to it.
+P1: page 11, TLB miss → page fault → free frame: 3 allocated to it.
+P1: page 8, TLB miss → page fault → free frame: 4 allocated to it.
+P1: page 3, TLB miss → page fault → free frame: 5 allocated to it.
+P1: page 13, TLB miss → page fault → free frame: 6 allocated to it.
+P1: page 2, TLB miss → page fault → free frame: 7 allocated to it.
+P1: page 12, TLB miss → page fault → free frame: 8 allocated to it.
+P1: page 13, TLB hit with frame no. 6
+P1: page 5, TLB miss → page fault → free frame: 9 allocated to it.
+P1: page 3, TLB hit with frame no. 5
+P1: page 7, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 9)
+P1: page 16, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 19)
+P1: page 13, TLB hit with frame no. 6
+P1: page 11, TLB hit with frame no. 3
+P1: page 1, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 8)
+P1: page 19, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 2)
+P1: page 4, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 12)
+P1: page 7, TLB hit with frame no. 1
+P1: page 18, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 5)
+P1: page 8, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 3)
+P1: page 13, TLB hit with frame no. 6
+P1: page 9, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 16)
+P1: page 8, TLB hit with frame no. 5
+P1: page 12, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 11)
+P1: page 17, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 1)
+P1: page 9, TLB hit with frame no. 2
+P1: page 6, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 19)
+P1: page 19, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 4)
+P1: page 6, TLB hit with frame no. 7
+P1: page 8, TLB hit with frame no. 5
+P1: page 4, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 7)
+P1: page 5, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 18)
+P1: page 19, TLB hit with frame no. 8
+P1: page 13, TLB hit with frame no. 6
+P1: page 8, TLB hit with frame no. 5
+P1: page 4, TLB hit with frame no. 1
+P1: page 7, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 12)
+P1: page 1, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 17)
+P1: page 10, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 9)
+P1: page 13, TLB hit with frame no. 6
+P1: page 4, TLB hit with frame no. 1
+P1: page 17, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 6)
+P1: page 1, TLB hit with frame no. 4
+P1: page 17, TLB hit with frame no. 7
+P1: page 8, TLB hit with frame no. 5
+P1: page 15, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 5)
+P1: page 8, TLB hit with frame no. 5
+P1: page 5, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 19)
+P1: page 2, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 7)
+P1: page 6, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 10)
+P1: page 13, TLB hit with frame no. 6
+P1: page 7, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 4)
+P1: page 8, TLB hit with frame no. 5
+P1: page 13, TLB hit with frame no. 6
+P1: page 19, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 1)
+P1: page 5, TLB hit with frame no. 8
+P1: page 3, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 17)
+P1: page 5, TLB hit with frame no. 8
+P1: page 16, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 15)
+P1: page 9, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 2)
+P1: page 13, TLB hit with frame no. 6
+P1: page 1, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 6)
+P1: page 6, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 7)
+P1: page 5, TLB hit with frame no. 8
+P1: page 14, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 8)
+P1: page 6, TLB hit with frame no. 1
+P1: page 1, TLB hit with frame no. 2
+P1: page 13, TLB hit with frame no. 6
+P1: page 19, TLB hit with frame no. 4
 P1: page 3, TLB hit with frame no. 7
-P1: page 3, TLB hit with frame no. 7
-P0: page 4, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 8)
-P0: page 18, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 1)
-P0: page 6, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 10)
-P0: page 0, TLB miss → page table valid → with frame no. 1
-P0: page 4, TLB hit with frame no. 3
-P1: page 13, TLB miss → page table valid → with frame no. 13
-P0: page 18, TLB hit with frame no. 6
-P0: page 8, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 13)
-P0: page 9, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 14)
-P0: page 17, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 6)
-P0: page 17, TLB hit with frame no. 5
-P0: page 16, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 0)
-P0: page 4, TLB hit with frame no. 3
-P0: page 3, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 18)
-P0: page 10, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 8)
-P0: page 3, TLB hit with frame no. 6
-P0: page 10, TLB hit with frame no. 4
-P0: page 19, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 9)
-P0: page 12, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 17)
-P0: page 5, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 16)
-P0: page 4, TLB hit with frame no. 3
-P0: page 10, TLB hit with frame no. 4
-P0: page 5, TLB hit with frame no. 1
-P0: page 19, TLB hit with frame no. 2
-P0: page 14, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 3)
-P0: page 6, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 12)
-P0: page 9, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 4)
-P1: page 8, TLB hit with frame no. 0
-P1: page 2, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 18)
-P1: page 4, TLB miss → page table valid → with frame no. 11
-P1: page 17, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 11)
-P1: page 7, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 9)
-P1: page 15, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 16)
-P1: page 4, TLB hit with frame no. 11
-P1: page 8, TLB hit with frame no. 0
-P1: page 11, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 3)
-P1: page 2, TLB hit with frame no. 12
-P1: page 8, TLB hit with frame no. 0
-P1: page 19, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 13)
-P1: page 3, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 17)
-P1: page 6, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 7)
-P1: page 8, TLB hit with frame no. 0
-P1: page 0, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 15)
-P1: page 2, TLB hit with frame no. 12
-P1: page 11, TLB hit with frame no. 7
-P1: page 10, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 4)
-P1: page 5, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 19)
-P1: page 1, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 3)
-P1: page 1, TLB hit with frame no. 9
-P1: page 10, TLB hit with frame no. 11
-P1: page 18, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 6)
-P1: page 5, TLB hit with frame no. 13
-P1: page 0, TLB hit with frame no. 10
-P1: page 16, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 8)
-P1: page 4, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 2)
-P1: page 6, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 11)
-P0: page 2, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 10)
-P0: page 2, TLB hit with frame no. 4
-P0: page 5, TLB miss → page table valid → with frame no. 1
-P0: page 8, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 19)
-P0: page 16, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 14)
-P0: page 2, TLB hit with frame no. 4
-P0: page 18, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 6)
-P0: page 4, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 9)
-P0: page 17, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 5)
-P0: page 2, TLB hit with frame no. 4
-P0: page 4, TLB hit with frame no. 3
-P0: page 0, TLB miss → page fault → frame: 2 re-allocated to it. (previously alloc to pg: 8)
-P0: page 16, TLB hit with frame no. 6
+P1: page 18, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 16)
+P1: page 16, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 9)
+P1: page 1, TLB hit with frame no. 2
+P1: page 0, TLB miss → page fault → frame: 8 re-allocated to it. (previously alloc to pg: 5)
+P1: page 5, TLB miss → page fault → frame: 5 re-allocated to it. (previously alloc to pg: 14)
+P1: page 1, TLB hit with frame no. 2
+P1: page 15, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 6)
+P1: page 14, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 13)
+P1: page 6, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 19)
+P1: page 9, TLB miss → page fault → frame: 7 re-allocated to it. (previously alloc to pg: 3)
+P1: page 0, TLB hit with frame no. 8
+P0: page 5, TLB miss → page fault → free frame: 10 allocated to it.
+P0: page 16, TLB miss → page fault → free frame: 11 allocated to it.
+P0: page 0, TLB miss → page fault → free frame: 12 allocated to it.
+P0: page 5, TLB hit with frame no. 10
+P0: page 7, TLB miss → page fault → free frame: 13 allocated to it.
+P0: page 17, TLB miss → page fault → free frame: 14 allocated to it.
+P0: page 8, TLB miss → page fault → free frame: 15 allocated to it.
+P0: page 12, TLB miss → page fault → free frame: 16 allocated to it.
+P0: page 14, TLB miss → page fault → free frame: 17 allocated to it.
+P0: page 9, TLB miss → page table valid → with frame no. 0
+P0: page 18, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 16)
+P0: page 7, TLB hit with frame no. 13
+P0: page 7, TLB hit with frame no. 13
+P0: page 15, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 0)
+P0: page 1, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 5)
+P0: page 14, TLB hit with frame no. 17
+P0: page 8, TLB hit with frame no. 15
+P1: page 12, TLB miss → page fault → frame: 9 re-allocated to it. (previously alloc to pg: 18)
+P1: page 13, TLB miss → page fault → frame: 3 re-allocated to it. (previously alloc to pg: 16)
+P1: page 12, TLB hit with frame no. 9
+P1: page 5, TLB miss → page table valid → with frame no. 5
+P1: page 1, TLB hit with frame no. 2
+P1: page 13, TLB hit with frame no. 3
+P0: page 6, TLB miss → page fault → frame: 14 re-allocated to it. (previously alloc to pg: 17)
+P0: page 7, TLB hit with frame no. 13
+P0: page 6, TLB hit with frame no. 14
+P0: page 12, TLB hit with frame no. 16
+P0: page 1, TLB hit with frame no. 10
+P0: page 13, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 9)
+P0: page 13, TLB hit with frame no. 0
+P0: page 13, TLB hit with frame no. 0
+P0: page 17, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 18)
+P0: page 1, TLB hit with frame no. 10
+P0: page 6, TLB hit with frame no. 14
+P0: page 2, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 15)
+P1: page 5, TLB hit with frame no. 5
+P1: page 3, TLB miss → page fault → frame: 1 re-allocated to it. (previously alloc to pg: 15)
+P1: page 3, TLB hit with frame no. 1
+P0: page 8, TLB hit with frame no. 15
+P0: page 9, TLB miss → page fault → frame: 17 re-allocated to it. (previously alloc to pg: 14)
+P1: page 12, TLB hit with frame no. 9
+P0: page 4, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 7)
+P1: page 2, TLB miss → page fault → frame: 6 re-allocated to it. (previously alloc to pg: 14)
+P1: page 12, TLB hit with frame no. 9
+P1: page 17, TLB miss → page fault → frame: 4 re-allocated to it. (previously alloc to pg: 6)
+P1: page 9, TLB miss → page table valid → with frame no. 7
+P0: page 16, TLB miss → page fault → frame: 16 re-allocated to it. (previously alloc to pg: 12)
+P0: page 18, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 13)
+P0: page 18, TLB hit with frame no. 0
+P0: page 16, TLB hit with frame no. 16
+P0: page 3, TLB miss → page fault → frame: 11 re-allocated to it. (previously alloc to pg: 17)
+P0: page 10, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 1)
+P0: page 1, TLB miss → page fault → frame: 14 re-allocated to it. (previously alloc to pg: 6)
+P0: page 5, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 2)
+P0: page 15, TLB miss → page fault → frame: 15 re-allocated to it. (previously alloc to pg: 8)
+P0: page 18, TLB hit with frame no. 0
+P0: page 12, TLB miss → page fault → frame: 17 re-allocated to it. (previously alloc to pg: 9)
+P0: page 1, TLB hit with frame no. 14
+P0: page 2, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 4)
+P0: page 5, TLB hit with frame no. 12
+P0: page 6, TLB miss → page fault → frame: 16 re-allocated to it. (previously alloc to pg: 16)
+P0: page 15, TLB hit with frame no. 15
+P0: page 18, TLB hit with frame no. 0
+P0: page 3, TLB hit with frame no. 11
+P0: page 8, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 10)
+P0: page 4, TLB miss → page fault → frame: 17 re-allocated to it. (previously alloc to pg: 12)
+P0: page 18, TLB hit with frame no. 0
+P0: page 16, TLB miss → page fault → frame: 14 re-allocated to it. (previously alloc to pg: 1)
+P0: page 0, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 2)
+P0: page 13, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 5)
+P0: page 0, TLB hit with frame no. 13
+P0: page 9, TLB miss → page fault → frame: 16 re-allocated to it. (previously alloc to pg: 6)
+P0: page 17, TLB miss → page fault → frame: 15 re-allocated to it. (previously alloc to pg: 15)
+P0: page 3, TLB hit with frame no. 11
+P0: page 6, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 8)
+P0: page 1, TLB miss → page fault → frame: 17 re-allocated to it. (previously alloc to pg: 4)
+P0: page 12, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 18)
+P0: page 15, TLB miss → page fault → frame: 14 re-allocated to it. (previously alloc to pg: 16)
+P0: page 19, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 13)
+P0: page 10, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 0)
+P0: page 3, TLB hit with frame no. 11
+P0: page 3, TLB hit with frame no. 11
+P0: page 0, TLB miss → page fault → frame: 16 re-allocated to it. (previously alloc to pg: 9)
+P0: page 4, TLB miss → page fault → frame: 15 re-allocated to it. (previously alloc to pg: 17)
+P0: page 0, TLB hit with frame no. 16
+P0: page 7, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 6)
+P0: page 14, TLB miss → page fault → frame: 17 re-allocated to it. (previously alloc to pg: 1)
+P0: page 4, TLB hit with frame no. 15
+P0: page 1, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 12)
+P0: page 16, TLB miss → page fault → frame: 14 re-allocated to it. (previously alloc to pg: 15)
+P0: page 9, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 19)
+P0: page 7, TLB hit with frame no. 10
+P0: page 3, TLB hit with frame no. 11
+P0: page 7, TLB hit with frame no. 10
+P0: page 3, TLB hit with frame no. 11
+P0: page 3, TLB hit with frame no. 11
+P0: page 4, TLB hit with frame no. 15
+P0: page 1, TLB hit with frame no. 0
+P0: page 19, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 10)
+P0: page 4, TLB hit with frame no. 15
+P0: page 14, TLB hit with frame no. 17
+P0: page 12, TLB miss → page fault → frame: 16 re-allocated to it. (previously alloc to pg: 0)
+P0: page 13, TLB miss → page fault → frame: 14 re-allocated to it. (previously alloc to pg: 16)
+P0: page 3, TLB hit with frame no. 11
+P0: page 15, TLB miss → page fault → frame: 12 re-allocated to it. (previously alloc to pg: 9)
+P0: page 11, TLB miss → page fault → frame: 10 re-allocated to it. (previously alloc to pg: 7)
+P0: page 5, TLB miss → page fault → frame: 0 re-allocated to it. (previously alloc to pg: 1)
+P0: page 7, TLB miss → page fault → frame: 13 re-allocated to it. (previously alloc to pg: 19)
+P0: page 19, TLB miss → page fault → frame: 15 re-allocated to it. (previously alloc to pg: 4)
 
 All processes are completed!
-Number of page faults: 179
+Number of page faults: 108
